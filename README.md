@@ -19,6 +19,11 @@ git clone https://github.com/ctime-zliang/lerna-initbase
 #### usage
 
 ```
+// 具体以 package.json 中定义的命令为准
+
+// 全部安装 lerna
+npm install lerna -g
+
 // 初始化 lerna
 // 首次 clone 项目后安装依赖时直接执行此命令即可, 请不要执行 npm install
 npm run lerna:boot-hoist
