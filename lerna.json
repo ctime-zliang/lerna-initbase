@@ -1,0 +1,5 @@
+{
+	"packages": ["packages/*"],
+	"version": "0.0.0",
+	"nohoist": ["vue", "vue-loader", "vue-template-compiler", "@vue/compiler-sfc", "**/vue", "**/vue-loader/**"]
+}
