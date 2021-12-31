@@ -10,8 +10,8 @@
 		"husky:install": "husky install",
 		"prettier:write-all": "prettier --write .",
 		"prettier:check-all": "prettier --check .",
-		"eslint:check-src": "eslint --ext .js,.ts,.jsx,.tsx src",
-		"eslint:fix-src": "eslint --fix --ext .js,.ts,.jsx,.tsx src",
+		"eslint:check-packages": "eslint --ext .js,.ts,.jsx,.tsx packages",
+		"eslint:fix-packages": "eslint --fix --ext .js,.ts,.jsx,.tsx packages",
 		"tsc:check": "tsc --noEmit"
 	},
 	"workspaces": {

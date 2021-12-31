@@ -7,12 +7,19 @@ const webpackStats = require('./webpack.stats')
 const webpackConfigBase = {
 	name: `client`,
 	target: `web`,
+	mode: `development`,
 	devtool: 'source-map',
 	cache: {
 		type: `filesystem`,
 	},
 	entry: {
 		client: webpackPaths.client.entry.main,
+	},
+	output: {
+		publicPath: webpackPaths.client.devBuild.publicPath,
+		path: webpackPaths.client.devBuild.path(),
+		filename: webpackPaths.client.output.filename,
+		chunkFilename: webpackPaths.client.output.chunkFilename,
 	},
 	module: {
 		rules: webpackRules(`client`),

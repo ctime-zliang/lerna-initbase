@@ -8,17 +8,14 @@ const rules = webpackRulesLocal(`client`)
 rules.forEach(item => {
 	webpackInitConfig.module.rules.push(item)
 })
+
 const plugins = [...webpackPlugins.client.prodBuild(), ...webpackPluginsLocal.common(), ...webpackPluginsLocal.client.prodBuild()]
 plugins.forEach(item => {
 	webpackInitConfig.plugins.push(item)
 })
 
 webpackInitConfig.mode = `production`
-webpackInitConfig.output = {
-	publicPath: webpackPaths.client.prodBuild.publicPath,
-	path: webpackPaths.client.prodBuild.path(),
-	filename: webpackPaths.client.output.filename,
-	chunkFilename: webpackPaths.client.output.chunkFilename,
-}
+webpackInitConfig.output.publicPath = webpackPaths.client.prodBuild.publicPath
+webpackInitConfig.output.path = webpackPaths.client.prodBuild.path()
 
 module.exports = webpackInitConfig

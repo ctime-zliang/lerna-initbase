@@ -6,7 +6,7 @@ const init = () => {
 	new Vue({
 		el: '#app',
 		store: Store,
-		render: h => h(App),
+		render: (h: any) => h(App),
 	})
 }
 
