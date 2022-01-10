@@ -27,6 +27,7 @@
 </template>
 
 <script lang="ts">
+// import './assets/css/common.css'
 import { v4 as uuidv4 } from 'uuid'
 import { mapState, mapGetters } from 'vuex'
 import { MutationNamesEnum } from './store/mutations'

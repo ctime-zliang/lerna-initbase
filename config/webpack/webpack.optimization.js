@@ -48,22 +48,6 @@ module.exports = {
 					priority: -9,
 					reuseExistingChunk: true,
 				},
-				// public: {
-				// 	test: path.resolve('src/app/public'),
-				// 	name: `public`,
-				// 	chunks: `all`,
-				// 	priority: -8,
-				// 	reuseExistingChunk: true,
-				// 	enforce: true,
-				// },
-				// react: {
-				// 	test(module) {
-				// 		return /react/.test(module.context)
-				// 	},
-				// 	name: `react`,
-				// 	chunks: `all`,
-				// 	priority: -8
-				// }
 			},
 		},
 	},
