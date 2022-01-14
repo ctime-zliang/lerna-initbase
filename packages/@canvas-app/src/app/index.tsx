@@ -1,6 +1,6 @@
 import React from 'react'
 import Counter from './modules/counter'
-// import '../../../../node_modules/antd/dist/antd.css'
+import '../../../../node_modules/antd/dist/antd.css'
 import { main } from './canvas/main'
 
 export default function App(props: any) {

@@ -10,7 +10,7 @@ webpackInitConfig.entry.client = path.join(__dirname, '../src/client/index.tsx')
 const injectionWebpackSplitchunkRes = injectionWebpackSplitchunk()
 webpackInitConfig.optimization.splitChunks.cacheGroups = injectionWebpackSplitchunkRes.cacheGroups
 
-const plugins = [...webpackPlugins.client.devBuild(), ...webpackPluginsLocal.common(), ...webpackPluginsLocal.client.devBuild()]
+const plugins = [...webpackPlugins.client.prodBuild(), ...webpackPluginsLocal.common(), ...webpackPluginsLocal.client.prodBuild()]
 plugins.forEach(item => {
 	webpackInitConfig.plugins.push(item)
 })

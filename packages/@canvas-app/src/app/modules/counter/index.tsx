@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button } from 'antd'
-import style from './index.module.css'
+import style from './index.module.less'
 
 function Counter(): any {
 	const [count, setCount] = useState(0)
@@ -8,8 +8,11 @@ function Counter(): any {
 		setCount(count + 1)
 	}
 	return (
-		<section className={style['counter-container']} style={{ padding: '10px 20px' }}>
-			{/* <Button onClick={countClickAction}>Click Count {count}</Button> */}
+		<section className={style['counter-container']}>
+			<span>Click this Button: </span>
+			<Button type="primary" onClick={countClickAction}>
+				Click Count {count}
+			</Button>
 		</section>
 	)
 }
