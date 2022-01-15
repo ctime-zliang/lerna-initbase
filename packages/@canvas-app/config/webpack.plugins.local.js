@@ -3,7 +3,10 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 
 module.exports = {
 	common() {
-		return [new ReactRefreshPlugin(), new WebpackManifestPlugin({ fileName: 'manifest.json' })]
+		return [
+			// new ReactRefreshPlugin(),
+			new WebpackManifestPlugin({ fileName: 'manifest.json' }),
+		]
 	},
 	client: {
 		devBuild() {
