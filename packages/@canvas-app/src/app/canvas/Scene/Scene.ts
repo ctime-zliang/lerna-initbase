@@ -1,6 +1,6 @@
-﻿import { Circle } from '../Geometies/Geometry.Circle'
-import { Line } from '../Geometies/Geometry.Line'
-import { Rect } from '../Geometies/Geometry.Rect'
+﻿import { Circle } from '../Geometies/Circle'
+import { Line } from '../Geometies/Line'
+import { Rect } from '../Geometies/Rect'
 import { BoxSelectTool } from '../Tools/Tool.class'
 import { TDOMClientRect } from '../types/base.types'
 

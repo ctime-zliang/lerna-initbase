@@ -1,4 +1,4 @@
-import { GeometryBase } from './Geometry.Base'
+import { GeometryBase } from './Base'
 
 export class Rect extends GeometryBase {
 	private x: number

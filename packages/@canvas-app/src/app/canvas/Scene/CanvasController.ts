@@ -1,5 +1,5 @@
 import Events from '../utils/Events.class'
-import { ECanvasState, Scene } from './Scene.class'
+import { ECanvasState, Scene } from './Scene'
 
 const KEYCODE_DELETE: number = 46
 const KEYCODE_CTRL: number = 17

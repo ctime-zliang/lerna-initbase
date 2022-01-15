@@ -1,4 +1,4 @@
-import { GeometryBase, TOffset } from './Geometry.Base'
+import { GeometryBase, TOffset } from './Base'
 
 type TPosition2D = {
 	x: number

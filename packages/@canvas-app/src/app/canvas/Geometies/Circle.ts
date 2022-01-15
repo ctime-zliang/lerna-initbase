@@ -1,4 +1,4 @@
-import { GeometryBase, TOffset } from './Geometry.Base'
+import { GeometryBase, TOffset } from './Base'
 
 export class Circle extends GeometryBase {
 	private x: number
