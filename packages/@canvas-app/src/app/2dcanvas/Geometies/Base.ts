@@ -1,8 +1,8 @@
 import { TCanvasDrawSetting } from '../types/canvas.types'
 
-export type TGeometryBaseConfig = {
+export type TGeometryConfig = {
 	normal: TCanvasDrawSetting
-	hightlight: TCanvasDrawSetting
+	highlight: TCanvasDrawSetting
 }
 
 export const DEFAULT_NORMAL_DRAW_SETTING: TCanvasDrawSetting = {
@@ -17,22 +17,30 @@ export const DEFAULT_HIGHLIGHT_DRAW_SETTING: TCanvasDrawSetting = {
 }
 
 export class GeometryBase {
-	private config: TGeometryBaseConfig
+	private brushConfig: TGeometryConfig
 	private highlight: boolean
 	private checked: boolean
 	private index: number
 	constructor() {
-		this.config = {
-			normal: { ...DEFAULT_NORMAL_DRAW_SETTING },
-			hightlight: { ...DEFAULT_NORMAL_DRAW_SETTING, ...DEFAULT_HIGHLIGHT_DRAW_SETTING },
+		this.brushConfig = {
+			normal: DEFAULT_NORMAL_DRAW_SETTING,
+			highlight: DEFAULT_HIGHLIGHT_DRAW_SETTING,
 		}
 		this.highlight = false
 		this.checked = false
 		this.index = -1
 	}
 
-	public setPaintStyle(options: TCanvasDrawSetting): void {
-		this.config.normal = { ...this.config.normal, ...options }
+	public setNormalPaintStyle(options: TCanvasDrawSetting): void {
+		this.brushConfig.normal = { ...this.brushConfig.normal, ...options }
+	}
+
+	public setHighlightPaintStyle(options: TCanvasDrawSetting): void {
+		this.brushConfig.highlight = { ...this.brushConfig.highlight, ...options }
+	}
+
+	public getPaintStyle(): TCanvasDrawSetting {
+		return this.isHighlight() ? this.brushConfig.highlight : this.brushConfig.normal
 	}
 
 	public setShapeParameter(x: number, y: number): void {
@@ -65,10 +73,6 @@ export class GeometryBase {
 
 	public validate(): void {
 		/* ... */
-	}
-
-	public getConfig(): TGeometryBaseConfig {
-		return this.config
 	}
 
 	public setIndex(index: number = -1): void {

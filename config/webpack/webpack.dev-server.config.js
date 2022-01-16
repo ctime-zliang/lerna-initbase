@@ -20,7 +20,7 @@ module.exports = {
 		inline: true,
 		watchContentBase: true,
 		historyApiFallback: true,
-		writeToDisk: true,
+		writeToDisk: false,
 		headers: {
 			Cookie: `sessionKey=webpacdevsessionKey; PATH=/;`,
 		},

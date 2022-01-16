@@ -1,5 +1,5 @@
 import { TCanvasDrawSetting } from '../types/canvas.types'
-import { TOffset } from '../types/geometry.types'
+import { TGeometryOffset } from '../types/geometry.types'
 import { GeometryBase } from './Base'
 
 export class Rect extends GeometryBase {
@@ -25,7 +25,7 @@ export class Rect extends GeometryBase {
 		this.y += distY
 	}
 
-	public getOffset(x: number, y: number): TOffset {
+	public getOffset(x: number, y: number): TGeometryOffset {
 		return {
 			distX: x - this.x,
 			distY: y - this.y,
@@ -39,7 +39,7 @@ export class Rect extends GeometryBase {
 	}
 
 	public draw(ctx: CanvasRenderingContext2D): void {
-		const brushConfig: TCanvasDrawSetting = this.isHighlight() ? this.getConfig().hightlight : this.getConfig().normal
+		const brushConfig: TCanvasDrawSetting = this.getPaintStyle()
 		ctx.beginPath()
 		ctx.fillStyle = brushConfig.fillStyle
 		ctx.strokeStyle = brushConfig.strokeStyle

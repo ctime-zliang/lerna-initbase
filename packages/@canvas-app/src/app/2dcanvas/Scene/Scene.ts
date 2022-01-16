@@ -19,7 +19,7 @@ export type TSceneTools = {
 
 export type TSceneConfig = {
 	state: ECanvasState.DRAWING | ECanvasState.SELECT
-	canvasRect: TDOMClientRect
+	canvasRect: TDOMClientRectJSON
 	dirty: boolean
 	reDrawByResizeTimer: any
 }
@@ -59,44 +59,48 @@ export const DEFAULT_CANVAS_DRAW_SETTING: TCanvasDrawSetting = {
 export class Scene {
 	protected geometryConstructor: TGeometryType
 	protected geometries: Array<TGeometryType>
-	protected config: TSceneConfig | any
-	protected tools: TSceneTools | any
-	protected toolState: TSceneToolState | any
-	protected mouseState: TSceneMouseState | any
-	protected keyboardState: TSceneKeyboardState | any
-	protected offScreen: TSceneoffScreen | any
+	protected config: TSceneConfig
+	protected tools: TSceneTools
+	protected toolState: TSceneToolState
+	protected mouseState: TSceneMouseState
+	protected keyboardState: TSceneKeyboardState
+	protected offScreen: TSceneoffScreen
 	protected canvasElement: HTMLCanvasElement
-	protected canvasCtx: CanvasRenderingContext2D | any
+	protected canvasCtx: CanvasRenderingContext2D
 	constructor(canvasElement: HTMLCanvasElement) {
 		if (!canvasElement || canvasElement.nodeName.toUpperCase() !== 'CANVAS') {
 			return
 		}
-		this.geometryConstructor = null
-		this.geometries = []
-		this.config = {}
-		this.tools = {}
-		this.toolState = {}
-		this.mouseState = {}
-		this.keyboardState = {}
-		this.offScreen = {}
+		this.geometryConstructor
+		this.geometries
+		this.config
+		this.tools
+		this.toolState
+		this.mouseState
+		this.keyboardState
+		this.offScreen
+		this.canvasCtx
 		this.canvasElement = canvasElement
-		this.canvasCtx = canvasElement.getContext('2d')
 	}
 
 	public initScene(): void {
 		this.bindWindowResizeEvent()
-		this.offScreen = this.createOffScreenCanvas()
+		this.geometryConstructor = null
+		this.geometries = []
 		this.config = {
 			state: ECanvasState.DRAWING,
 			canvasRect: this.createCanvasRect(),
 			dirty: false,
 			reDrawByResizeTimer: null,
 		}
-		this.toolState = this.initToolState()
 		this.tools = this.initTools()
+		this.toolState = this.initToolState()
 		this.mouseState = this.initMouseState()
 		this.keyboardState = this.initKeyboardState()
+		this.offScreen = this.createOffScreenCanvas()
+		this.canvasCtx = this.canvasElement.getContext('2d') as CanvasRenderingContext2D
 		this.setCanvasElementRect()
+		/* rAF 持续渲染 */
 		this.continuedRender()
 	}
 

@@ -2,7 +2,7 @@ import { Circle } from '../Geometies/Circle'
 import { Line } from '../Geometies/Line'
 import { Rect } from '../Geometies/Rect'
 
-export type TOffset = {
+export type TGeometryOffset = {
 	distX: number
 	distY: number
 }

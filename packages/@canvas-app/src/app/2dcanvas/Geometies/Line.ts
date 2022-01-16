@@ -1,5 +1,5 @@
 import { TCanvasDrawSetting } from '../types/canvas.types'
-import { TOffset } from '../types/geometry.types'
+import { TGeometryOffset } from '../types/geometry.types'
 import { GeometryBase } from './Base'
 
 type TPosition2D = {
@@ -33,11 +33,11 @@ export class Line extends GeometryBase {
 
 	public moveTo(x: number, y: number): void {
 		const startPoint = this.path[0]
-		const startPointOffsetX = x - startPoint.x
-		const startPointOffsetY = y - startPoint.y
+		const startPoinTGeometryOffsetX = x - startPoint.x
+		const startPoinTGeometryOffsetY = y - startPoint.y
 		for (let i: number = 0; i < this.path.length; i++) {
-			this.path[i].x += startPointOffsetX
-			this.path[i].y += startPointOffsetY
+			this.path[i].x += startPoinTGeometryOffsetX
+			this.path[i].y += startPoinTGeometryOffsetY
 		}
 	}
 
@@ -58,7 +58,7 @@ export class Line extends GeometryBase {
 		return false
 	}
 
-	public getOffset(x: number, y: number): TOffset {
+	public getOffset(x: number, y: number): TGeometryOffset {
 		return {
 			distX: x - this.path[0].x,
 			distY: y - this.path[0].y,
@@ -66,7 +66,7 @@ export class Line extends GeometryBase {
 	}
 
 	public draw(ctx: CanvasRenderingContext2D): void {
-		const brushConfig: TCanvasDrawSetting = this.isHighlight() ? this.getConfig().hightlight : this.getConfig().normal
+		const brushConfig: TCanvasDrawSetting = this.getPaintStyle()
 		ctx.fillStyle = `rgba(0, 0, 0, 0)`
 		ctx.strokeStyle = brushConfig.strokeStyle
 		ctx.lineWidth = brushConfig.lineWidth

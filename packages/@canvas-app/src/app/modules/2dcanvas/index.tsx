@@ -12,8 +12,11 @@ function Canvas(props: any) {
 		if (canvasElement) {
 			const canvasContoller: CanvasContoller = new CanvasContoller(canvasElement)
 			canvasContoller.init()
+			canvasContoller.addGeometry(new Circle(200, 200, 75))
+			canvasContoller.addGeometry(new Rect(150, 90, 100, 100))
 			canvasContoller.setGeometryConstructor(Line)
 			canvasContoller.toggleStateToDrawing()
+			canvasContoller.rerender()
 			console.log(canvasContoller)
 		}
 	}, [])

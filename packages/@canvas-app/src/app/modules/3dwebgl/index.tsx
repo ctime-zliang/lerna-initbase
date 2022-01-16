@@ -1,9 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import styles from './index.module.less'
 import { CanvasContoller } from '../../2dcanvas/Scene/CanvasController'
-import { Circle } from '../../2dcanvas/Geometies/Circle'
-import { Line } from '../../2dcanvas/Geometies/Line'
-import { Rect } from '../../2dcanvas/Geometies/Rect'
 
 function Canvas(props: any) {
 	const canvasRef = useRef<null>(null)
@@ -12,9 +9,7 @@ function Canvas(props: any) {
 		if (canvasElement) {
 			const canvasContoller: CanvasContoller = new CanvasContoller(canvasElement)
 			canvasContoller.init()
-			canvasContoller.setGeometryConstructor(Rect)
-			canvasContoller.toggleStateToDrawing()
-			console.log(canvasContoller)
+			// console.log(canvasContoller)
 		}
 	}, [])
 	return (

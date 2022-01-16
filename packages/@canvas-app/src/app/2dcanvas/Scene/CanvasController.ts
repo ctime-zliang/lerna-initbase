@@ -1,4 +1,4 @@
-import Events from '../utils/Events.class'
+import Events from '../../utils/Events.class'
 import { ECanvasState, Scene } from './Scene'
 
 const KEYCODE_DELETE: number = 46
@@ -9,13 +9,13 @@ export class CanvasContoller extends Scene {
 	private eventsHandler: Events
 	constructor(canvasElement: HTMLCanvasElement) {
 		super(canvasElement)
-		this.variablesPool = {
-			/* ... */
-		}
-		this.eventsHandler = new Events()
+		this.variablesPool
+		this.eventsHandler
 	}
 
 	public init(): void {
+		this.variablesPool = {}
+		this.eventsHandler = new Events()
 		this.initScene()
 		this.initCanvasContoller()
 	}
@@ -56,7 +56,7 @@ export class CanvasContoller extends Scene {
 					/* 创建图形实例 */
 					if (this.geometryConstructor) {
 						this.variablesPool.geometryTarget = new this.geometryConstructor(this.mouseState.x, this.mouseState.y)
-						this.variablesPool.geometryTarget.setPaintStyle(this.toolState.paintBrushState)
+						this.variablesPool.geometryTarget.setNormalPaintStyle(this.toolState.paintBrushState)
 						this.variablesPool.geometryTarget.setAssistSetting({ smooth: this.toolState.smooth })
 					}
 					/* 将新创建的实例标注为鼠标动态跟踪对象  */
