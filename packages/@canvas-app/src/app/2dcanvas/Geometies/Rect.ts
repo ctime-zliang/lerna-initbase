@@ -1,3 +1,5 @@
+import { TCanvasDrawSetting } from '../types/canvas.types'
+import { TOffset } from '../types/geometry.types'
 import { GeometryBase } from './Base'
 
 export class Rect extends GeometryBase {
@@ -23,14 +25,21 @@ export class Rect extends GeometryBase {
 		this.y += distY
 	}
 
+	public getOffset(x: number, y: number): TOffset {
+		return {
+			distX: x - this.x,
+			distY: y - this.y,
+		}
+	}
+
 	public choose(x: number, y: number): boolean {
-		const absoluteMiddleX = this.x + this.w / 2
-		const absoluteMiddleY = this.y + this.h / 2
+		const absoluteMiddleX: number = this.x + this.w / 2
+		const absoluteMiddleY: number = this.y + this.h / 2
 		return Math.abs(x - absoluteMiddleX) < Math.abs(this.w / 2) && Math.abs(y - absoluteMiddleY) < Math.abs(this.h / 2)
 	}
 
 	public draw(ctx: CanvasRenderingContext2D): void {
-		const brushConfig = this.highlight ? this.config.hightlight : this.config.normal
+		const brushConfig: TCanvasDrawSetting = this.isHighlight() ? this.getConfig().hightlight : this.getConfig().normal
 		ctx.beginPath()
 		ctx.fillStyle = brushConfig.fillStyle
 		ctx.strokeStyle = brushConfig.strokeStyle

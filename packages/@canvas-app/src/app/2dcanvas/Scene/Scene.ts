@@ -1,24 +1,15 @@
-﻿import { Circle } from '../Geometies/Circle'
-import { Line } from '../Geometies/Line'
-import { Rect } from '../Geometies/Rect'
-import { BoxSelectTool } from '../Tools/Tool.class'
-import { TDOMClientRect } from '../types/base.types'
+﻿import { BoxSelectTool } from '../Tools/BoxSelect.Tool'
+import { TCanvasDrawSetting } from '../types/canvas.types'
+import { TDOMClientRect, TDOMClientRectJSON } from '../types/dom.types'
+import { TGeometryType } from '../types/geometry.types'
 
 export enum ECanvasState {
 	DRAWING = 'DRAWING',
 	SELECT = 'SELECT',
 }
 
-export type TGeometryType = Circle | Line | Rect | any
-
-export type TCanvasBrushSetting = {
-	fillStyle: string
-	lineWidth: number
-	strokeStyle: string
-}
-
 export type TSceneToolState = {
-	paintBrushState: TCanvasBrushSetting
+	paintBrushState: TCanvasDrawSetting
 	smooth: boolean
 }
 
@@ -59,7 +50,7 @@ export type TSceneClickFoundRes = {
 	geometryTargetIndex: number
 }
 
-export const DEFAULT_BRUSH_CONFIG: TCanvasBrushSetting = {
+export const DEFAULT_CANVAS_DRAW_SETTING: TCanvasDrawSetting = {
 	strokeStyle: '#000000',
 	fillStyle: '#ffff00',
 	lineWidth: 4,
@@ -92,6 +83,23 @@ export class Scene {
 		this.canvasCtx = canvasElement.getContext('2d')
 	}
 
+	public initScene(): void {
+		this.bindWindowResizeEvent()
+		this.offScreen = this.createOffScreenCanvas()
+		this.config = {
+			state: ECanvasState.DRAWING,
+			canvasRect: this.createCanvasRect(),
+			dirty: false,
+			reDrawByResizeTimer: null,
+		}
+		this.toolState = this.initToolState()
+		this.tools = this.initTools()
+		this.mouseState = this.initMouseState()
+		this.keyboardState = this.initKeyboardState()
+		this.setCanvasElementRect()
+		this.continuedRender()
+	}
+
 	private bindWindowResizeEvent(): void {
 		window.addEventListener('resize', evte => {
 			window.clearTimeout(this.config.reDrawByResizeTimer)
@@ -108,7 +116,7 @@ export class Scene {
 	}
 
 	private setCanvasElementRect(rect: { [key: string]: any } = {}): void {
-		const canvasRect = { ...this.config.canvasRect, ...rect }
+		const canvasRect: TDOMClientRectJSON = { ...this.config.canvasRect, ...rect }
 		this.canvasElement.tabIndex = 0
 		this.canvasElement.width = canvasRect.width
 		this.canvasElement.height = canvasRect.height
@@ -117,7 +125,7 @@ export class Scene {
 	}
 
 	private initToolState(): TSceneToolState {
-		const paintBrushState: TCanvasBrushSetting = { ...DEFAULT_BRUSH_CONFIG }
+		const paintBrushState: TCanvasDrawSetting = { ...DEFAULT_CANVAS_DRAW_SETTING }
 		return {
 			paintBrushState,
 			smooth: false,
@@ -151,8 +159,8 @@ export class Scene {
 		}
 	}
 
-	private createCanvasRect(): TDOMClientRect {
-		const domRect = this.canvasElement.getBoundingClientRect()
+	private createCanvasRect(): TDOMClientRectJSON {
+		const domRect: TDOMClientRect = this.canvasElement.getBoundingClientRect()
 		return domRect.toJSON()
 	}
 
@@ -197,29 +205,12 @@ export class Scene {
 		})
 	}
 
-	private rerenderWith(ctx: CanvasRenderingContext2D, geometries: any[] = []): void {
-		const _geometries = geometries.length ? geometries : this.geometries
+	private rerenderWith(ctx: CanvasRenderingContext2D, geometries: Array<TGeometryType> = []): void {
+		const _geometries: Array<TGeometryType> = geometries.length ? geometries : this.geometries
 		this.clearCanvas(ctx)
-		for (let i = 0; i < _geometries.length; i++) {
+		for (let i: number = 0; i < _geometries.length; i++) {
 			_geometries[i].draw(ctx)
 		}
-	}
-
-	public initScene(): void {
-		this.bindWindowResizeEvent()
-		this.offScreen = this.createOffScreenCanvas()
-		this.config = {
-			state: ECanvasState.DRAWING,
-			canvasRect: this.createCanvasRect(),
-			dirty: false,
-			reDrawByResizeTimer: null,
-		}
-		this.toolState = this.initToolState()
-		this.tools = this.initTools()
-		this.mouseState = this.initMouseState()
-		this.keyboardState = this.initKeyboardState()
-		this.setCanvasElementRect()
-		this.continuedRender()
 	}
 
 	public rerender(): void {

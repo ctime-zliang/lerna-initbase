@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react'
-import './index.less'
-import { CanvasContoller } from '../../canvas/Scene/CanvasController'
-import { Circle } from '../../canvas/Geometies/Circle'
-import { Line } from '../../canvas/Geometies/Line'
-import { Rect } from '../../canvas/Geometies/Rect'
+import React, { useEffect, useRef } from 'react'
+import styles from './index.module.less'
+import { CanvasContoller } from '../../2dcanvas/Scene/CanvasController'
+import { Circle } from '../../2dcanvas/Geometies/Circle'
+import { Line } from '../../2dcanvas/Geometies/Line'
+import { Rect } from '../../2dcanvas/Geometies/Rect'
 
-function Canvas() {
+function Canvas(props: any) {
+	const canvasRef = useRef<null>(null)
 	useEffect(() => {
-		let canvasElement: any = document.querySelector('canvas')
+		let canvasElement: any = canvasRef.current
 		if (canvasElement) {
 			const canvasContoller: CanvasContoller = new CanvasContoller(canvasElement)
 			canvasContoller.init()
@@ -18,14 +19,12 @@ function Canvas() {
 	}, [])
 	return (
 		<section>
-			<div id="gCount"></div>
-			<div className="canvas-container">
-				<div className="canvas-content-wrapper">
-					<canvas></canvas>
+			<div className={styles['canvas-container']}>
+				<div className={styles['canvas-content-wrapper']}>
+					<canvas ref={canvasRef}></canvas>
 				</div>
 			</div>
 			<div
-				id="t_c_1"
 				style={{
 					position: 'absolute',
 					top: 0,

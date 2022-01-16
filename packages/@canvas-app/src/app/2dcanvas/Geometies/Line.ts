@@ -1,4 +1,6 @@
-import { GeometryBase, TOffset } from './Base'
+import { TCanvasDrawSetting } from '../types/canvas.types'
+import { TOffset } from '../types/geometry.types'
+import { GeometryBase } from './Base'
 
 type TPosition2D = {
 	x: number
@@ -33,22 +35,22 @@ export class Line extends GeometryBase {
 		const startPoint = this.path[0]
 		const startPointOffsetX = x - startPoint.x
 		const startPointOffsetY = y - startPoint.y
-		for (let i = 0; i < this.path.length; i++) {
+		for (let i: number = 0; i < this.path.length; i++) {
 			this.path[i].x += startPointOffsetX
 			this.path[i].y += startPointOffsetY
 		}
 	}
 
 	public moveDist(distX: number, distY: number): void {
-		for (let i = 0; i < this.path.length; i++) {
+		for (let i: number = 0; i < this.path.length; i++) {
 			this.path[i].x += distX
 			this.path[i].y += distY
 		}
 	}
 
 	public choose(x: number, y: number): boolean {
-		const round = this.lineWidth > 10 ? Math.pow(this.lineWidth, 2) : 30
-		for (let i = 0; i < this.path.length; i++) {
+		const round: number = this.lineWidth > 10 ? Math.pow(this.lineWidth, 2) : 30
+		for (let i: number = 0; i < this.path.length; i++) {
 			if (Math.pow(this.path[i].x - x, 2) + Math.pow(this.path[i].y - y, 2) < round) {
 				return true
 			}
@@ -64,7 +66,7 @@ export class Line extends GeometryBase {
 	}
 
 	public draw(ctx: CanvasRenderingContext2D): void {
-		const brushConfig = this.highlight ? this.config.hightlight : this.config.normal
+		const brushConfig: TCanvasDrawSetting = this.isHighlight() ? this.getConfig().hightlight : this.getConfig().normal
 		ctx.fillStyle = `rgba(0, 0, 0, 0)`
 		ctx.strokeStyle = brushConfig.strokeStyle
 		ctx.lineWidth = brushConfig.lineWidth
@@ -103,7 +105,7 @@ export class Line extends GeometryBase {
 		}
 	}
 
-	validate(): boolean {
+	public validate(): boolean {
 		return this.path.length >= 5
 	}
 }

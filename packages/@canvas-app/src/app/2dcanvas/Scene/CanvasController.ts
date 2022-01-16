@@ -15,7 +15,12 @@ export class CanvasContoller extends Scene {
 		this.eventsHandler = new Events()
 	}
 
-	private initCanvasContoller() {
+	public init(): void {
+		this.initScene()
+		this.initCanvasContoller()
+	}
+
+	private initCanvasContoller(): void {
 		this.bindRightClickEvent()
 		this.bindMousedownEvent()
 		this.bindMousemoveEvent()
@@ -25,17 +30,17 @@ export class CanvasContoller extends Scene {
 		this.bindBlurEvent()
 	}
 
-	private isOnlyCtrlKeydown() {
+	private isOnlyCtrlKeydown(): boolean {
 		return this.keyboardState.keys.length === 1 && this.keyboardState.keys[0] === KEYCODE_CTRL
 	}
 
-	private bindRightClickEvent() {
+	private bindRightClickEvent(): void {
 		this.canvasElement.addEventListener('contextmenu', evte => {
 			// evte.preventDefault()
 		})
 	}
 
-	private bindMousedownEvent() {
+	private bindMousedownEvent(): void {
 		this.canvasElement.addEventListener('mousedown', evte => {
 			evte.stopPropagation()
 			this.mouseState.down = true
@@ -59,9 +64,9 @@ export class CanvasContoller extends Scene {
 					this.variablesPool.geometryTarget = null
 					/* 重绘离屏画布 */
 					this.clearCanvas(this.offScreen.cacheCanvasCtx)
-					for (let i = 0; i < this.geometries.length; i++) {
-						this.geometries[i].cancelHighlight()
-						this.geometries[i].cancelChecked()
+					for (let i: number = 0; i < this.geometries.length; i++) {
+						this.geometries[i].setUnHighlight()
+						this.geometries[i].setUnChecked()
 						this.geometries[i].draw(this.offScreen.cacheCanvasCtx)
 					}
 					/* ... */
@@ -73,20 +78,20 @@ export class CanvasContoller extends Scene {
 					this.variablesPool.targetResult = this.findClickedTarget(this.mouseState.x, this.mouseState.y)
 					if (!this.variablesPool.targetResult.geometryTarget) {
 						this.mouseState.selectedIndexs = []
-						for (let i = 0; i < this.geometries.length; i++) {
-							this.geometries[i].cancelChecked()
-							this.geometries[i].cancelHighlight()
+						for (let i: number = 0; i < this.geometries.length; i++) {
+							this.geometries[i].setUnChecked()
+							this.geometries[i].setUnHighlight()
 						}
 						this.mouseState.toolTarget = this.tools.boxSelector
 						this.mouseState.toolTarget.setStartCoordinate(this.mouseState.x, this.mouseState.y)
 					} else {
-						const inIndex = this.mouseState.selectedIndexs.indexOf(this.variablesPool.targetResult.geometryTargetIndex)
+						const inIndex: number = this.mouseState.selectedIndexs.indexOf(this.variablesPool.targetResult.geometryTargetIndex)
 						if (this.mouseState.selectedIndexs.length >= 2 && inIndex >= 0) {
 							if (this.isOnlyCtrlKeydown()) {
 								if (inIndex >= 0) {
 									this.mouseState.selectedIndexs.splice(inIndex, 1)
-									this.variablesPool.targetResult.geometryTarget.cancelChecked()
-									this.variablesPool.targetResult.geometryTarget.cancelHighlight()
+									this.variablesPool.targetResult.geometryTarget.setUnChecked()
+									this.variablesPool.targetResult.geometryTarget.setUnHighlight()
 								} else {
 									this.mouseState.selectedIndexs.push(this.variablesPool.targetResult.geometryTargetIndex)
 									this.variablesPool.targetResult.geometryTarget.setChecked()
@@ -97,8 +102,8 @@ export class CanvasContoller extends Scene {
 							if (this.isOnlyCtrlKeydown()) {
 								if (inIndex >= 0) {
 									this.mouseState.selectedIndexs.splice(inIndex, 1)
-									this.variablesPool.targetResult.geometryTarget.cancelChecked()
-									this.variablesPool.targetResult.geometryTarget.cancelHighlight()
+									this.variablesPool.targetResult.geometryTarget.setUnChecked()
+									this.variablesPool.targetResult.geometryTarget.setUnHighlight()
 								} else {
 									this.mouseState.selectedIndexs.push(this.variablesPool.targetResult.geometryTargetIndex)
 									this.variablesPool.targetResult.geometryTarget.setChecked()
@@ -106,12 +111,12 @@ export class CanvasContoller extends Scene {
 								}
 							} else {
 								this.mouseState.selectedIndexs = [this.variablesPool.targetResult.geometryTargetIndex]
-								for (let i = 0; i < this.geometries.length; i++) {
+								for (let i: number = 0; i < this.geometries.length; i++) {
 									if (this.mouseState.selectedIndexs.includes(i)) {
 										continue
 									}
-									this.geometries[i].cancelChecked()
-									this.geometries[i].cancelHighlight()
+									this.geometries[i].setUnChecked()
+									this.geometries[i].setUnHighlight()
 								}
 								this.variablesPool.targetResult.geometryTarget.setChecked()
 								this.variablesPool.targetResult.geometryTarget.setHighlight()
@@ -120,7 +125,7 @@ export class CanvasContoller extends Scene {
 					}
 					/* 重绘离屏画布 */
 					this.clearCanvas(this.offScreen.cacheCanvasCtx)
-					for (let i = 0; i < this.geometries.length; i++) {
+					for (let i: number = 0; i < this.geometries.length; i++) {
 						if (this.mouseState.selectedIndexs.includes(i)) {
 							continue
 						}
@@ -133,7 +138,7 @@ export class CanvasContoller extends Scene {
 		})
 	}
 
-	private bindMousemoveEvent() {
+	private bindMousemoveEvent(): void {
 		document.addEventListener('mousemove', evte => {
 			evte.stopPropagation()
 			if (!this.mouseState.down || this.isOnlyCtrlKeydown()) {
@@ -161,7 +166,7 @@ export class CanvasContoller extends Scene {
 				if (this.mouseState.toolTarget) {
 					this.mouseState.toolTarget.setShapeParameter(this.mouseState.x, this.mouseState.y)
 				}
-				for (let i = this.mouseState.selectedIndexs.length - 1; i >= 0; i--) {
+				for (let i: number = this.mouseState.selectedIndexs.length - 1; i >= 0; i--) {
 					const geometry = this.geometries[this.mouseState.selectedIndexs[i]]
 					geometry.moveDist(this.variablesPool.moveDistX, this.variablesPool.moveDistY)
 				}
@@ -169,7 +174,7 @@ export class CanvasContoller extends Scene {
 		})
 	}
 
-	private bindMouseupEvent() {
+	private bindMouseupEvent(): void {
 		document.addEventListener('mouseup', evte => {
 			evte.stopPropagation()
 			if (this.mouseState.down) {
@@ -185,7 +190,7 @@ export class CanvasContoller extends Scene {
 					this.mouseState.pointTarget = null
 					/* 重绘离屏画布 */
 					this.clearCanvas(this.offScreen.cacheCanvasCtx)
-					for (let i = 0; i < this.geometries.length; i++) {
+					for (let i: number = 0; i < this.geometries.length; i++) {
 						this.geometries[i].draw(this.offScreen.cacheCanvasCtx)
 					}
 					/* ... */
@@ -209,14 +214,14 @@ export class CanvasContoller extends Scene {
 		})
 	}
 
-	private bindBlurEvent() {
+	private bindBlurEvent(): void {
 		window.addEventListener('blur', evte => {
 			this.keyboardState.keys = []
 			this.config.dirty = false
 		})
 	}
 
-	private bindKeydownEvent() {
+	private bindKeydownEvent(): void {
 		document.addEventListener('keydown', evte => {
 			if (!this.keyboardState.keys.includes(evte.keyCode)) {
 				this.keyboardState.keys.push(evte.keyCode)
@@ -224,14 +229,14 @@ export class CanvasContoller extends Scene {
 			/* 删除图形对象 */
 			if (evte.keyCode === KEYCODE_DELETE && this.mouseState.selectedIndexs.length) {
 				const geometries = []
-				for (let i = 0; i < this.geometries.length; i++) {
+				for (let i: number = 0; i < this.geometries.length; i++) {
 					if (!this.mouseState.selectedIndexs.includes(i)) {
 						geometries.push(this.geometries[i])
 					}
 				}
 				this.geometries = geometries
 				this.clearCanvas(this.offScreen.cacheCanvasCtx)
-				for (let i = 0; i < this.geometries.length; i++) {
+				for (let i: number = 0; i < this.geometries.length; i++) {
 					this.geometries[i].draw(this.offScreen.cacheCanvasCtx)
 				}
 				this.config.dirty = true
@@ -240,9 +245,9 @@ export class CanvasContoller extends Scene {
 		})
 	}
 
-	private bindKeyupEvent() {
+	private bindKeyupEvent(): void {
 		document.addEventListener('keyup', evte => {
-			const opKeyIndex = this.keyboardState.keys.indexOf(evte.keyCode)
+			const opKeyIndex: number = this.keyboardState.keys.indexOf(evte.keyCode)
 			if (opKeyIndex >= 0) {
 				this.keyboardState.keys.splice(opKeyIndex, 1)
 			}
@@ -250,10 +255,5 @@ export class CanvasContoller extends Scene {
 				this.config.dirty = false
 			}
 		})
-	}
-
-	public init() {
-		this.initScene()
-		this.initCanvasContoller()
 	}
 }

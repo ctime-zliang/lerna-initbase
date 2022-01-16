@@ -6,8 +6,8 @@
 	"scripts": {
 		"prettier:write-all": "prettier --write .",
 		"prettier:check-all": "prettier --check .",
-		"client:dev": "cross-env NODE_ENV=development webpack server --config ./config/webpack-client.dev.config.js --env --client-only=true",
-		"client:prod": "cross-env NODE_ENV=production webpack --config ./config/webpack-client.prod.config.js --env --client-only=true"
+		"client:dev": "rimraf ./dist && cross-env NODE_ENV=development webpack server --config ./config/webpack-client.dev.config.js --env --client-only=true",
+		"client:prod": "rimraf ./dist && cross-env NODE_ENV=production webpack --config ./config/webpack-client.prod.config.js --env --client-only=true"
 	},
 	"keywords": [],
 	"author": "",
@@ -20,6 +20,7 @@
 	"devDependencies": {
 		"@types/vue": "^2.0.0",
 		"prettier": "^2.2.1",
+		"rimraf": "^3.0.2",
 		"ts-node": "^10.0.0",
 		"vue-hot-reload-api": "^2.3.0",
 		"vue-loader": "^15.7.2",

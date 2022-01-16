@@ -1,10 +1,10 @@
 const drawDashLine = (ctx: CanvasRenderingContext2D, [x1, y1]: [number, number], [x2, y2]: [number, number], step = 5): void => {
-	const x = x2 - x1
-	const y = y2 - y1
-	const count = Math.floor(Math.sqrt(x * x + y * y) / step)
-	const xv = x / count
-	const yv = y / count
-	for (let i = 0; i < count; i++) {
+	const x: number = x2 - x1
+	const y: number = y2 - y1
+	const count: number = Math.floor(Math.sqrt(x * x + y * y) / step)
+	const xv: number = x / count
+	const yv: number = y / count
+	for (let i: number = 0; i < count; i++) {
 		if (i % 2 === 0) {
 			ctx.moveTo(x1, y1)
 		} else {

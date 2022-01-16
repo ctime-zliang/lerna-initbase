@@ -1,4 +1,6 @@
-import { GeometryBase, TOffset } from './Base'
+import { TCanvasDrawSetting } from '../types/canvas.types'
+import { TOffset } from '../types/geometry.types'
+import { GeometryBase } from './Base'
 
 export class Circle extends GeometryBase {
 	private x: number
@@ -32,7 +34,7 @@ export class Circle extends GeometryBase {
 	}
 
 	public draw(ctx: CanvasRenderingContext2D): void {
-		const brushConfig = this.highlight ? this.config.hightlight : this.config.normal
+		const brushConfig: TCanvasDrawSetting = this.isHighlight() ? this.getConfig().hightlight : this.getConfig().normal
 		ctx.beginPath()
 		ctx.fillStyle = brushConfig.fillStyle
 		ctx.strokeStyle = brushConfig.strokeStyle
@@ -43,7 +45,7 @@ export class Circle extends GeometryBase {
 		ctx.closePath()
 	}
 
-	validate(): boolean {
+	public validate(): boolean {
 		return this.r >= 5
 	}
 }
