@@ -6,7 +6,6 @@ const utils = require('../../../../config/utils')
 const webpackInitModule = webpackLibInitConfig.module
 delete webpackLibInitConfig.module
 const webpackConfig = {
-	target: 'web',
 	mode: 'production',
 	entry: {
 		main: utils.resolveDirectory(`./src/app/2dcanvas/main.ts`),
