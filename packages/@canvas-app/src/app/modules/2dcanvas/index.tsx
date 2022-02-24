@@ -1,20 +1,17 @@
 import React, { useEffect, useRef } from 'react'
 import styles from './index.module.less'
-import { CanvasContoller } from '../../2dcanvas/Scene/CanvasController'
-import { Circle } from '../../2dcanvas/Geometies/Circle'
-import { Line } from '../../2dcanvas/Geometies/Line'
-import { Rect } from '../../2dcanvas/Geometies/Rect'
+import d2canvas from '../../../../build/2dcanvas'
 
 function Canvas(props: any) {
 	const canvasRef = useRef<null>(null)
 	useEffect(() => {
 		let canvasElement: any = canvasRef.current
 		if (canvasElement) {
-			const canvasContoller: CanvasContoller = new CanvasContoller(canvasElement)
+			const canvasContoller = new d2canvas.CanvasContoller(canvasElement)
 			canvasContoller.init()
-			canvasContoller.addGeometry(new Circle(200, 200, 75))
-			canvasContoller.addGeometry(new Rect(150, 90, 100, 100))
-			canvasContoller.setGeometryConstructor(Line)
+			canvasContoller.addGeometry(new d2canvas.Geometry.Circle(200, 200, 75))
+			canvasContoller.addGeometry(new d2canvas.Geometry.Rect(150, 90, 100, 100))
+			canvasContoller.setGeometryConstructor(d2canvas.Geometry.Line)
 			canvasContoller.toggleStateToDrawing()
 			canvasContoller.rerender()
 			console.log(canvasContoller)

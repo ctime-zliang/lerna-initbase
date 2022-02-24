@@ -56,7 +56,7 @@ export class CanvasContoller extends Scene {
 					/* 创建图形实例 */
 					if (this.geometryConstructor) {
 						this.variablesPool.geometryTarget = new this.geometryConstructor(this.mouseState.x, this.mouseState.y)
-						this.variablesPool.geometryTarget.setNormalPaintStyle(this.toolState.paintBrushState)
+						// this.variablesPool.geometryTarget.setNormalPaintStyle(this.toolState.paintBrushState)
 						this.variablesPool.geometryTarget.setAssistSetting({ smooth: this.toolState.smooth })
 					}
 					/* 将新创建的实例标注为鼠标动态跟踪对象  */

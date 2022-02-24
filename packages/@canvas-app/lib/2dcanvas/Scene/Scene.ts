@@ -53,7 +53,7 @@ export type TSceneClickFoundRes = {
 export const DEFAULT_CANVAS_DRAW_SETTING: TCanvasDrawSetting = {
 	strokeStyle: '#000000',
 	fillStyle: '#ffff00',
-	lineWidth: 4,
+	lineWidth: 2,
 }
 
 export class Scene {

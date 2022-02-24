@@ -80,6 +80,7 @@
 		"cross-env": "^7.0.3",
 		"css-hot-loader": "^1.4.4",
 		"css-loader": "~0.28.9",
+		"dts-bundle": "^0.7.3",
 		"enzyme": "^3.11.0",
 		"enzyme-adapter-react-16": "^1.15.6",
 		"enzyme-to-json": "^3.6.2",

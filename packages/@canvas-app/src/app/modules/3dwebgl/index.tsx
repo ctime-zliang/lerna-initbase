@@ -1,15 +1,12 @@
 import React, { useEffect, useRef } from 'react'
 import styles from './index.module.less'
-import { CanvasContoller } from '../../2dcanvas/Scene/CanvasController'
 
 function Canvas(props: any) {
 	const canvasRef = useRef<null>(null)
 	useEffect(() => {
 		let canvasElement: any = canvasRef.current
 		if (canvasElement) {
-			const canvasContoller: CanvasContoller = new CanvasContoller(canvasElement)
-			canvasContoller.init()
-			// console.log(canvasContoller)
+			/* ... */
 		}
 	}, [])
 	return (

@@ -21,6 +21,6 @@
 		"noEmit": false,
 		"baseUrl": "./packages/@canvas-app"
 	},
-	"include": ["src"],
+	"include": ["lib"],
 	"exclude": ["./config/**"]
 }

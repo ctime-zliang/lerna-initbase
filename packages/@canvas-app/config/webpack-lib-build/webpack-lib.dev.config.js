@@ -8,10 +8,10 @@ delete webpackLibInitConfig.module
 const webpackConfig = {
 	mode: 'development',
 	entry: {
-		main: utils.resolveDirectory(`./src/app/2dcanvas/main.ts`),
+		main: utils.resolveDirectory(`./lib/2dcanvas/main.ts`),
 	},
 	output: {
-		path: utils.resolveDirectory(`./build/dev`),
+		path: utils.resolveDirectory(`./build`),
 		filename: `2dcanvas.js`,
 		libraryExport: 'default',
 		libraryTarget: 'umd',
@@ -19,7 +19,8 @@ const webpackConfig = {
 	},
 	module: {
 		...webpackInitModule,
-		rules: [rules('libDevBuild')],
+		// rules: [rules('libDevBuild')],
+		rules: [rules('libProdBuild')],
 	},
 	devtool: 'source-map',
 }
