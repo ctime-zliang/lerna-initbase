@@ -28,7 +28,7 @@ export class Circle extends GeometryBase {
 export class Line extends GeometryBase {
 	constructor(x: number, y: number)
 	setShapeParameter(x: number, y: number): void
-	setAssistSetting({ smooth }: { smooth: boolean }): void
+	setAssistSetting(setting: TGeometryAssistSetting): void
 	moveTo(x: number, y: number): void
 	moveDist(distX: number, distY: number): void
 	choose(x: number, y: number): boolean
@@ -115,16 +115,28 @@ export class Scene {
 	findClickedTarget(x: number, y: number): TSceneClickFoundRes
 }
 
+export type TCanvasDrawSetting = {
+	fillStyle: string
+	lineWidth: number
+	strokeStyle: string
+}
+export type TPosition2D = {
+	x: number
+	y: number
+}
 export type TGeometryOffset = {
 	distX: number
 	distY: number
 }
 export type TGeometryType = Circle | Line | Rect | any
-
+export type TGeometryAssistSetting = {
+	smooth?: boolean
+}
 export type TGeometryConfig = {
 	normal: TCanvasDrawSetting
 	highlight: TCanvasDrawSetting
 }
+
 export const DEFAULT_NORMAL_DRAW_SETTING: TCanvasDrawSetting
 export const DEFAULT_HIGHLIGHT_DRAW_SETTING: TCanvasDrawSetting
 export class GeometryBase {
@@ -148,6 +160,8 @@ export class GeometryBase {
 	setHighlight(): void
 	setUnHighlight(): void
 	isHighlight(): boolean
+	setId(id: string): void
+	getId(): string | null
 }
 
 export class BoxSelectTool {
@@ -157,12 +171,6 @@ export class BoxSelectTool {
 	setShapeParameter(x: number, y: number): void
 	draw(ctx: CanvasRenderingContext2D): void
 	drawDashRect(ctx: CanvasRenderingContext2D, left: number, top: number, width: number, height: number, step?: number): void
-}
-
-export type TCanvasDrawSetting = {
-	fillStyle: string
-	lineWidth: number
-	strokeStyle: string
 }
 
 export type TDOMClientRectJSON = {

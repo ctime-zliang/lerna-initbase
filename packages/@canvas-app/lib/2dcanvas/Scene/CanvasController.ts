@@ -1,5 +1,5 @@
 import Events from '../../utils/Events.class'
-import { ECanvasState, Scene } from './Scene'
+import { ECanvasState, Scene, TSceneClickFoundRes } from './Scene'
 
 const KEYCODE_DELETE: number = 46
 const KEYCODE_CTRL: number = 17
@@ -35,18 +35,18 @@ export class CanvasContoller extends Scene {
 	}
 
 	private bindRightClickEvent(): void {
-		this.canvasElement.addEventListener('contextmenu', evte => {
+		this.canvasElement.addEventListener('contextmenu', (evte: MouseEvent): void => {
 			// evte.preventDefault()
 		})
 	}
 
 	private bindMousedownEvent(): void {
-		this.canvasElement.addEventListener('mousedown', evte => {
+		this.canvasElement.addEventListener('mousedown', (evte: MouseEvent): void => {
 			evte.stopPropagation()
 			this.mouseState.down = true
 			this.mouseState.x = evte.offsetX
 			this.mouseState.y = evte.offsetY
-			Promise.resolve().then(() => {
+			Promise.resolve().then((): void => {
 				if (evte.button !== 0) {
 					return
 				}
@@ -75,8 +75,14 @@ export class CanvasContoller extends Scene {
 				}
 				/* 选择模式 */
 				if (this.config.state === ECanvasState.SELECT) {
-					this.variablesPool.targetResult = this.findClickedTarget(this.mouseState.x, this.mouseState.y)
+					/* 查询当前鼠标点击时被选中的几何图元 */
+					this.variablesPool.targetResult = <TSceneClickFoundRes>this.findClickedTarget(this.mouseState.x, this.mouseState.y)
 					if (!this.variablesPool.targetResult.geometryTarget) {
+						/*
+							未选中任何几何图元
+								将所有几何图元取消高亮
+								将鼠标状态修改为"框选工具"状态
+						 */
 						this.mouseState.selectedIndexs = []
 						for (let i: number = 0; i < this.geometries.length; i++) {
 							this.geometries[i].setUnChecked()
@@ -87,19 +93,15 @@ export class CanvasContoller extends Scene {
 					} else {
 						const inIndex: number = this.mouseState.selectedIndexs.indexOf(this.variablesPool.targetResult.geometryTargetIndex)
 						if (this.mouseState.selectedIndexs.length >= 2 && inIndex >= 0) {
+							/* 选中了处于被选中状态的几何图元 */
 							if (this.isOnlyCtrlKeydown()) {
-								if (inIndex >= 0) {
-									this.mouseState.selectedIndexs.splice(inIndex, 1)
-									this.variablesPool.targetResult.geometryTarget.setUnChecked()
-									this.variablesPool.targetResult.geometryTarget.setUnHighlight()
-								} else {
-									this.mouseState.selectedIndexs.push(this.variablesPool.targetResult.geometryTargetIndex)
-									this.variablesPool.targetResult.geometryTarget.setChecked()
-									this.variablesPool.targetResult.geometryTarget.setHighlight()
-								}
+								this.mouseState.selectedIndexs.splice(inIndex, 1)
+								this.variablesPool.targetResult.geometryTarget.setUnChecked()
+								this.variablesPool.targetResult.geometryTarget.setUnHighlight()
 							}
 						} else {
 							if (this.isOnlyCtrlKeydown()) {
+								/* (仅)按住 Ctrl 键时交替删除/增加该选中的几何图元 */
 								if (inIndex >= 0) {
 									this.mouseState.selectedIndexs.splice(inIndex, 1)
 									this.variablesPool.targetResult.geometryTarget.setUnChecked()
@@ -110,9 +112,10 @@ export class CanvasContoller extends Scene {
 									this.variablesPool.targetResult.geometryTarget.setHighlight()
 								}
 							} else {
+								/* 设置仅选中当前被选中的几何图元 */
 								this.mouseState.selectedIndexs = [this.variablesPool.targetResult.geometryTargetIndex]
 								for (let i: number = 0; i < this.geometries.length; i++) {
-									if (this.mouseState.selectedIndexs.includes(i)) {
+									if (this.mouseState.selectedIndexs[0] === i) {
 										continue
 									}
 									this.geometries[i].setUnChecked()
@@ -139,7 +142,7 @@ export class CanvasContoller extends Scene {
 	}
 
 	private bindMousemoveEvent(): void {
-		document.addEventListener('mousemove', evte => {
+		document.addEventListener('mousemove', (evte: MouseEvent): void => {
 			evte.stopPropagation()
 			if (!this.mouseState.down || this.isOnlyCtrlKeydown()) {
 				return
@@ -175,7 +178,7 @@ export class CanvasContoller extends Scene {
 	}
 
 	private bindMouseupEvent(): void {
-		document.addEventListener('mouseup', evte => {
+		document.addEventListener('mouseup', (evte: MouseEvent): void => {
 			evte.stopPropagation()
 			if (this.mouseState.down) {
 				this.mouseState.isMove = false
@@ -215,14 +218,14 @@ export class CanvasContoller extends Scene {
 	}
 
 	private bindBlurEvent(): void {
-		window.addEventListener('blur', evte => {
+		window.addEventListener('blur', (evte: Event): void => {
 			this.keyboardState.keys = []
 			this.config.dirty = false
 		})
 	}
 
 	private bindKeydownEvent(): void {
-		document.addEventListener('keydown', evte => {
+		document.addEventListener('keydown', (evte: KeyboardEvent): void => {
 			if (!this.keyboardState.keys.includes(evte.keyCode)) {
 				this.keyboardState.keys.push(evte.keyCode)
 			}
@@ -246,7 +249,7 @@ export class CanvasContoller extends Scene {
 	}
 
 	private bindKeyupEvent(): void {
-		document.addEventListener('keyup', evte => {
+		document.addEventListener('keyup', (evte: KeyboardEvent): void => {
 			const opKeyIndex: number = this.keyboardState.keys.indexOf(evte.keyCode)
 			if (opKeyIndex >= 0) {
 				this.keyboardState.keys.splice(opKeyIndex, 1)

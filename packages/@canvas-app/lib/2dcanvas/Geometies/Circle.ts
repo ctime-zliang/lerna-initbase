@@ -1,5 +1,4 @@
-import { TCanvasDrawSetting } from '../types/canvas.types'
-import { TGeometryOffset } from '../types/geometry.types'
+import { TCanvasDrawSetting, TGeometryOffset } from '../types/geometry-canvas.types'
 import { GeometryBase } from './Base'
 
 export class Circle extends GeometryBase {

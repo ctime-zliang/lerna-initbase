@@ -1,11 +1,5 @@
-import { TCanvasDrawSetting } from '../types/canvas.types'
-import { TGeometryOffset } from '../types/geometry.types'
+import { TCanvasDrawSetting, TGeometryAssistSetting, TGeometryOffset, TPosition2D } from '../types/geometry-canvas.types'
 import { GeometryBase } from './Base'
-
-type TPosition2D = {
-	x: number
-	y: number
-}
 
 export class Line extends GeometryBase {
 	private path: Array<TPosition2D>
@@ -27,14 +21,16 @@ export class Line extends GeometryBase {
 		}
 	}
 
-	public setAssistSetting({ smooth }: { smooth: boolean }): void {
-		this.smooth = smooth
+	public setAssistSetting(setting: TGeometryAssistSetting): void {
+		if (typeof setting.smooth !== 'undefined') {
+			this.smooth = !!setting.smooth
+		}
 	}
 
 	public moveTo(x: number, y: number): void {
-		const startPoint = this.path[0]
-		const startPoinTGeometryOffsetX = x - startPoint.x
-		const startPoinTGeometryOffsetY = y - startPoint.y
+		const startPoint: TPosition2D = this.path[0]
+		const startPoinTGeometryOffsetX: number = x - startPoint.x
+		const startPoinTGeometryOffsetY: number = y - startPoint.y
 		for (let i: number = 0; i < this.path.length; i++) {
 			this.path[i].x += startPoinTGeometryOffsetX
 			this.path[i].y += startPoinTGeometryOffsetY
@@ -76,7 +72,7 @@ export class Line extends GeometryBase {
          */
 		if (!this.smooth) {
 			ctx.beginPath()
-			for (let i = 0; i < this.path.length; i++) {
+			for (let i: number = 0; i < this.path.length; i++) {
 				ctx.lineTo(this.path[i].x, this.path[i].y)
 			}
 			ctx.stroke()
@@ -86,8 +82,8 @@ export class Line extends GeometryBase {
 		if (this.path.length > 3) {
 			ctx.beginPath()
 			ctx.moveTo(this.path[0].x, this.path[0].y)
-			let i = 1
-			// let samplingIntervalNumber = this.path.length >= this.samplingIntervalNumber ? this.samplingIntervalNumber : 1
+			let i: number = 1
+			// let samplingIntervalNumber: number = this.path.length >= this.samplingIntervalNumber ? this.samplingIntervalNumber : 1
 			for (i = 1; i < this.path.length - 2; i += this.samplingIntervalNumber) {
 				if (this.path[i] && this.path[i + 1]) {
 					const xc = (this.path[i].x + this.path[i + 1].x) / 2

@@ -1,7 +1,6 @@
 ﻿import { BoxSelectTool } from '../Tools/BoxSelect.Tool'
-import { TCanvasDrawSetting } from '../types/canvas.types'
 import { TDOMClientRect, TDOMClientRectJSON } from '../types/dom.types'
-import { TGeometryType } from '../types/geometry.types'
+import { TCanvasDrawSetting, TGeometryType } from '../types/geometry-canvas.types'
 
 export enum ECanvasState {
 	DRAWING = 'DRAWING',

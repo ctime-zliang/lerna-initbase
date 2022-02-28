@@ -1,9 +1,4 @@
-import { TCanvasDrawSetting } from '../types/canvas.types'
-
-export type TGeometryConfig = {
-	normal: TCanvasDrawSetting
-	highlight: TCanvasDrawSetting
-}
+import { TCanvasDrawSetting, TGeometryConfig } from '../types/geometry-canvas.types'
 
 export const DEFAULT_NORMAL_DRAW_SETTING: TCanvasDrawSetting = {
 	fillStyle: 'rgba(255, 255, 0, 1)',
@@ -21,6 +16,7 @@ export class GeometryBase {
 	private highlight: boolean
 	private checked: boolean
 	private index: number
+	private id: string | null
 	constructor() {
 		this.brushConfig = {
 			normal: DEFAULT_NORMAL_DRAW_SETTING,
@@ -29,6 +25,7 @@ export class GeometryBase {
 		this.highlight = false
 		this.checked = false
 		this.index = -1
+		this.id = null
 	}
 
 	public setNormalPaintStyle(options: TCanvasDrawSetting): void {
@@ -105,5 +102,13 @@ export class GeometryBase {
 
 	public isHighlight(): boolean {
 		return this.highlight
+	}
+
+	public setId(id: string): void {
+		this.id = id
+	}
+
+	public getId(): string | null {
+		return this.id
 	}
 }

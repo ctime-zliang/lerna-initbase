@@ -11,8 +11,9 @@ function Canvas(props: any) {
 			canvasContoller.init()
 			canvasContoller.addGeometry(new d2canvas.Geometry.Circle(200, 200, 75))
 			canvasContoller.addGeometry(new d2canvas.Geometry.Rect(150, 90, 100, 100))
+			canvasContoller.addGeometry(new d2canvas.Geometry.Rect(350, 90, 100, 100))
 			canvasContoller.setGeometryConstructor(d2canvas.Geometry.Line)
-			canvasContoller.toggleStateToDrawing()
+			canvasContoller.toggleStateToSelect()
 			canvasContoller.rerender()
 			console.log(canvasContoller)
 		}
