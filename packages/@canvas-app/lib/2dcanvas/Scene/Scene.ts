@@ -99,19 +99,18 @@ export class Scene {
 		this.offScreen = this.createOffScreenCanvas()
 		this.canvasCtx = this.canvasElement.getContext('2d') as CanvasRenderingContext2D
 		this.setCanvasElementRect()
-		/* rAF 持续渲染 */
 		this.continuedRender()
 	}
 
 	private bindWindowResizeEvent(): void {
-		window.addEventListener('resize', evte => {
+		window.addEventListener('resize', (evte: Event): void => {
 			window.clearTimeout(this.config.reDrawByResizeTimer)
 			this.config.reDrawByResizeTimer = window.setTimeout(() => {
 				this.config.canvasRect = this.createCanvasRect()
 				this.setCanvasElementRect()
 				/* 重绘输出画布 */
 				this.clearCanvas(this.canvasCtx)
-				for (let i = this.geometries.length - 1; i >= 0; i--) {
+				for (let i: number = this.geometries.length - 1; i >= 0; i--) {
 					this.geometries[i].draw(this.canvasCtx)
 				}
 			}, 300)
@@ -183,7 +182,7 @@ export class Scene {
 	}
 
 	private continuedRender(): void {
-		window.requestAnimationFrame(() => {
+		window.requestAnimationFrame((): void => {
 			if (!this.config.dirty) {
 				this.continuedRender()
 				return
@@ -251,7 +250,8 @@ export class Scene {
 	}
 
 	public clearAllGeometries(): void {
-		this.geometries = []
+		// this.geometries = []
+		this.geometries.length = 0
 	}
 
 	public removeGeometry(index: number): void {

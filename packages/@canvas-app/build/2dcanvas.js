@@ -761,7 +761,6 @@ var Scene = /** @class */ (function () {
         this.offScreen = this.createOffScreenCanvas();
         this.canvasCtx = this.canvasElement.getContext('2d');
         this.setCanvasElementRect();
-        /* rAF 持续渲染 */
         this.continuedRender();
     };
     Scene.prototype.bindWindowResizeEvent = function () {
@@ -894,7 +893,8 @@ var Scene = /** @class */ (function () {
         this.config.state = ECanvasState.SELECT;
     };
     Scene.prototype.clearAllGeometries = function () {
-        this.geometries = [];
+        // this.geometries = []
+        this.geometries.length = 0;
     };
     Scene.prototype.removeGeometry = function (index) {
         if (String(+index) === 'NaN' || index < 0) {
@@ -975,7 +975,7 @@ var BoxSelectTool = /** @class */ (function () {
     function BoxSelectTool(x, y, w, h) {
         this.brushConfig = {
             fillStyle: 'rgba(255, 255, 255, 0)',
-            lineWidth: 1,
+            lineWidth: 0.5,
             strokeStyle: 'rgba(0, 0, 0, 1)',
         };
         this.x = x;

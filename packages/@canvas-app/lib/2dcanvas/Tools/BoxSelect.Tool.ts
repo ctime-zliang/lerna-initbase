@@ -25,7 +25,7 @@ export class BoxSelectTool {
 	constructor(x: number, y: number, w: number, h: number) {
 		this.brushConfig = {
 			fillStyle: 'rgba(255, 255, 255, 0)',
-			lineWidth: 1,
+			lineWidth: 0.5,
 			strokeStyle: 'rgba(0, 0, 0, 1)',
 		}
 		this.x = x
