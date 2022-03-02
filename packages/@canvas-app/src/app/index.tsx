@@ -7,7 +7,6 @@ export default function App(props: any) {
 	return (
 		<section className="react-app">
 			<D2Canvas />
-			<D3WebGL />
 		</section>
 	)
 }

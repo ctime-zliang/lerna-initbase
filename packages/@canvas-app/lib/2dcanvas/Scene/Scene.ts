@@ -1,6 +1,6 @@
 ﻿import { BoxSelectTool } from '../Tools/BoxSelect.Tool'
 import { TDOMClientRect, TDOMClientRectJSON } from '../types/dom.types'
-import { TCanvasDrawSetting, TGeometryType } from '../types/geometry-canvas.types'
+import { TCanvasDrawSetting, TCanvasImageDataResult, TGeometryType } from '../types/geometry-canvas.types'
 
 export enum ECanvasState {
 	DRAWING = 'DRAWING',
@@ -68,7 +68,7 @@ export class Scene {
 	protected canvasCtx: CanvasRenderingContext2D
 	constructor(canvasElement: HTMLCanvasElement) {
 		if (!canvasElement || canvasElement.nodeName.toUpperCase() !== 'CANVAS') {
-			return
+			throw new Error(`target dom must be a canvas element.`)
 		}
 		this.geometryConstructor
 		this.geometries
@@ -197,8 +197,8 @@ export class Scene {
 			if (this.mouseState.pointTarget) {
 				this.mouseState.pointTarget.draw(this.canvasCtx)
 			}
-			for (let i = this.mouseState.selectedIndexs.length - 1; i >= 0; i--) {
-				const geometry = this.geometries[this.mouseState.selectedIndexs[i]]
+			for (let i: number = this.mouseState.selectedIndexs.length - 1; i >= 0; i--) {
+				const geometry: TGeometryType = this.geometries[this.mouseState.selectedIndexs[i]]
 				// if (geometry === this.mouseState.pointTarget) {
 				//     continue
 				// }
@@ -214,6 +214,15 @@ export class Scene {
 		for (let i: number = 0; i < _geometries.length; i++) {
 			_geometries[i].draw(ctx)
 		}
+	}
+
+	public getPixCanvasData(): TCanvasImageDataResult {
+		return this.canvasCtx.getImageData(
+			this.config.canvasRect.left,
+			this.config.canvasRect.top,
+			this.config.canvasRect.width,
+			this.config.canvasRect.height
+		)
 	}
 
 	public rerender(): void {
@@ -257,7 +266,7 @@ export class Scene {
 	}
 
 	public pushGeometries(geometries: Array<TGeometryType>): void {
-		geometries.forEach(item => {
+		geometries.forEach((item: TGeometryType) => {
 			this.geometries.push(item)
 		})
 	}
@@ -271,9 +280,9 @@ export class Scene {
 	}
 
 	public findClickedTarget(x: number, y: number): TSceneClickFoundRes {
-		let geometryTarget = null
-		let geometryTargetIndex = -1
-		for (let i = this.geometries.length - 1; i >= 0; i--) {
+		let geometryTarget: TGeometryType = null
+		let geometryTargetIndex: number = -1
+		for (let i: number = this.geometries.length - 1; i >= 0; i--) {
 			if (this.geometries[i].choose(x, y) && !geometryTarget) {
 				geometryTarget = this.geometries[i]
 				geometryTargetIndex = i

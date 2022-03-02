@@ -100,6 +100,7 @@ export class Scene {
 	protected canvasCtx: CanvasRenderingContext2D
 	constructor(canvasElement: HTMLCanvasElement)
 	initScene(): void
+	getPixCanvasData(): TCanvasImageDataResult
 	rerender(): void
 	getToolState(): TSceneToolState
 	setToolState(toolState: TSceneToolState): void
@@ -120,21 +121,34 @@ export type TCanvasDrawSetting = {
 	lineWidth: number
 	strokeStyle: string
 }
+/************************ ************************/
 export type TPosition2D = {
 	x: number
 	y: number
 }
+/************************ ************************/
 export type TGeometryOffset = {
 	distX: number
 	distY: number
 }
+/************************ ************************/
 export type TGeometryType = Circle | Line | Rect | any
+/************************ ************************/
 export type TGeometryAssistSetting = {
 	smooth?: boolean
 }
+/************************ ************************/
 export type TGeometryConfig = {
 	normal: TCanvasDrawSetting
 	highlight: TCanvasDrawSetting
+}
+/************************ ************************/
+export type TCanvasImageDataResult = {
+	data: any
+	width?: number
+	height?: number
+	colorSpace?: string
+	storageFormat?: string
 }
 
 export const DEFAULT_NORMAL_DRAW_SETTING: TCanvasDrawSetting

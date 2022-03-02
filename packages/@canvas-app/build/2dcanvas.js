@@ -433,6 +433,7 @@ var CanvasContoller = /** @class */ (function (_super) {
         var _this = _super.call(this, canvasElement) || this;
         _this.variablesPool;
         _this.eventsHandler;
+        _this.mouseWheelEventHandler = _this.mouseWheelEventHandler.bind(_this);
         return _this;
     }
     CanvasContoller.prototype.init = function () {
@@ -446,6 +447,7 @@ var CanvasContoller = /** @class */ (function (_super) {
         this.bindMousedownEvent();
         this.bindMousemoveEvent();
         this.bindMouseupEvent();
+        this.bindMouseWheelEvent();
         this.bindKeydownEvent();
         this.bindKeyupEvent();
         this.bindBlurEvent();
@@ -637,6 +639,10 @@ var CanvasContoller = /** @class */ (function (_super) {
             }
         });
     };
+    CanvasContoller.prototype.bindMouseWheelEvent = function () {
+        this.canvasElement.addEventListener('mousewheel', this.mouseWheelEventHandler);
+        this.canvasElement.addEventListener('DOMMouseScroll', this.mouseWheelEventHandler);
+    };
     CanvasContoller.prototype.bindBlurEvent = function () {
         var _this = this;
         window.addEventListener('blur', function (evte) {
@@ -680,6 +686,10 @@ var CanvasContoller = /** @class */ (function (_super) {
             }
         });
     };
+    CanvasContoller.prototype.mouseWheelEventHandler = function (evte) {
+        evte.preventDefault();
+        console.log(evte);
+    };
     return CanvasContoller;
 }(Scene_1.Scene));
 exports.CanvasContoller = CanvasContoller;
@@ -721,7 +731,7 @@ exports.DEFAULT_CANVAS_DRAW_SETTING = {
 var Scene = /** @class */ (function () {
     function Scene(canvasElement) {
         if (!canvasElement || canvasElement.nodeName.toUpperCase() !== 'CANVAS') {
-            return;
+            throw new Error("target dom must be a canvas element.");
         }
         this.geometryConstructor;
         this.geometries;
@@ -860,6 +870,9 @@ var Scene = /** @class */ (function () {
         for (var i = 0; i < _geometries.length; i++) {
             _geometries[i].draw(ctx);
         }
+    };
+    Scene.prototype.getPixCanvasData = function () {
+        return this.canvasCtx.getImageData(this.config.canvasRect.left, this.config.canvasRect.top, this.config.canvasRect.width, this.config.canvasRect.height);
     };
     Scene.prototype.rerender = function () {
         this.rerenderWith(this.offScreen.cacheCanvasCtx);

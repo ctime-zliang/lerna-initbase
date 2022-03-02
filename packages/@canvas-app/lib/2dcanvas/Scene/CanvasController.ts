@@ -11,6 +11,7 @@ export class CanvasContoller extends Scene {
 		super(canvasElement)
 		this.variablesPool
 		this.eventsHandler
+		this.mouseWheelEventHandler = this.mouseWheelEventHandler.bind(this)
 	}
 
 	public init(): void {
@@ -25,6 +26,7 @@ export class CanvasContoller extends Scene {
 		this.bindMousedownEvent()
 		this.bindMousemoveEvent()
 		this.bindMouseupEvent()
+		this.bindMouseWheelEvent()
 		this.bindKeydownEvent()
 		this.bindKeyupEvent()
 		this.bindBlurEvent()
@@ -217,6 +219,11 @@ export class CanvasContoller extends Scene {
 		})
 	}
 
+	private bindMouseWheelEvent(): void {
+		this.canvasElement.addEventListener('mousewheel', this.mouseWheelEventHandler)
+		this.canvasElement.addEventListener('DOMMouseScroll', this.mouseWheelEventHandler)
+	}
+
 	private bindBlurEvent(): void {
 		window.addEventListener('blur', (evte: Event): void => {
 			this.keyboardState.keys = []
@@ -258,5 +265,10 @@ export class CanvasContoller extends Scene {
 				this.config.dirty = false
 			}
 		})
+	}
+
+	private mouseWheelEventHandler(evte: Event): void {
+		evte.preventDefault()
+		console.log(evte)
 	}
 }

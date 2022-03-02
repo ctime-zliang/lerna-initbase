@@ -15,6 +15,7 @@ function Canvas(props: any) {
 			canvasContoller.setGeometryConstructor(d2canvas.Geometry.Line)
 			canvasContoller.toggleStateToSelect()
 			canvasContoller.rerender()
+			console.log(canvasContoller.getPixCanvasData())
 			console.log(canvasContoller)
 		}
 	}, [])
