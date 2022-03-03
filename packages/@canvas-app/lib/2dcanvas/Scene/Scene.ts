@@ -7,7 +7,7 @@ export enum ECanvasState {
 	SELECT = 'SELECT',
 }
 
-export type TSceneToolState = {
+export type TSceneDrawSetting = {
 	paintBrushState: TCanvasDrawSetting
 	smooth: boolean
 }
@@ -60,7 +60,7 @@ export class Scene {
 	protected geometries: Array<TGeometryType>
 	protected config: TSceneConfig
 	protected tools: TSceneTools
-	protected toolState: TSceneToolState
+	protected drawSetting: TSceneDrawSetting
 	protected mouseState: TSceneMouseState
 	protected keyboardState: TSceneKeyboardState
 	protected offScreen: TSceneoffScreen
@@ -74,7 +74,7 @@ export class Scene {
 		this.geometries
 		this.config
 		this.tools
-		this.toolState
+		this.drawSetting
 		this.mouseState
 		this.keyboardState
 		this.offScreen
@@ -93,7 +93,7 @@ export class Scene {
 			reDrawByResizeTimer: null,
 		}
 		this.tools = this.initTools()
-		this.toolState = this.initToolState()
+		this.drawSetting = this.initDrawSetting()
 		this.mouseState = this.initMouseState()
 		this.keyboardState = this.initKeyboardState()
 		this.offScreen = this.createOffScreenCanvas()
@@ -126,7 +126,7 @@ export class Scene {
 		this.offScreen.cacheCanvasElement.height = canvasRect.height
 	}
 
-	private initToolState(): TSceneToolState {
+	private initDrawSetting(): TSceneDrawSetting {
 		const paintBrushState: TCanvasDrawSetting = { ...DEFAULT_CANVAS_DRAW_SETTING }
 		return {
 			paintBrushState,
@@ -229,12 +229,12 @@ export class Scene {
 		this.rerenderWith(this.canvasCtx)
 	}
 
-	public getToolState(): TSceneToolState {
-		return JSON.parse(JSON.stringify(this.toolState))
+	public getDrawSetting(): TSceneDrawSetting {
+		return JSON.parse(JSON.stringify(this.drawSetting))
 	}
 
-	public setToolState(toolState: TSceneToolState): void {
-		this.toolState = JSON.parse(JSON.stringify(toolState))
+	public setDrawSetting(drawSetting: TSceneDrawSetting): void {
+		this.drawSetting = JSON.parse(JSON.stringify(drawSetting))
 	}
 
 	public setGeometryConstructor(geometryConstructor: any): void {

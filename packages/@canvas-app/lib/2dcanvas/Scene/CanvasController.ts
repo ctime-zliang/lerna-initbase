@@ -1,4 +1,4 @@
-import Events from '../../utils/Events.class'
+import EventsBus from '../../utils/EventsBus.class'
 import { ECanvasState, Scene, TSceneClickFoundRes } from './Scene'
 
 const KEYCODE_DELETE: number = 46
@@ -6,17 +6,15 @@ const KEYCODE_CTRL: number = 17
 
 export class CanvasContoller extends Scene {
 	private variablesPool: { [key: string]: any }
-	private eventsHandler: Events
+	private eventsHandler: EventsBus
 	constructor(canvasElement: HTMLCanvasElement) {
 		super(canvasElement)
-		this.variablesPool
-		this.eventsHandler
-		this.mouseWheelEventHandler = this.mouseWheelEventHandler.bind(this)
+		this.variablesPool = {}
+		this.eventsHandler = new EventsBus()
+		this.variablesPool.mouseWheelEventHandler = this.mouseWheelEventHandler.bind(this)
 	}
 
 	public init(): void {
-		this.variablesPool = {}
-		this.eventsHandler = new Events()
 		this.initScene()
 		this.initCanvasContoller()
 	}
@@ -58,8 +56,8 @@ export class CanvasContoller extends Scene {
 					/* 创建图形实例 */
 					if (this.geometryConstructor) {
 						this.variablesPool.geometryTarget = new this.geometryConstructor(this.mouseState.x, this.mouseState.y)
-						// this.variablesPool.geometryTarget.setNormalPaintStyle(this.toolState.paintBrushState)
-						this.variablesPool.geometryTarget.setAssistSetting({ smooth: this.toolState.smooth })
+						// this.variablesPool.geometryTarget.setNormalPaintStyle(this.drawSetting.paintBrushState)
+						this.variablesPool.geometryTarget.setAssistSetting({ smooth: this.drawSetting.smooth })
 					}
 					/* 将新创建的实例标注为鼠标动态跟踪对象  */
 					this.mouseState.pointTarget = this.variablesPool.geometryTarget
@@ -220,8 +218,8 @@ export class CanvasContoller extends Scene {
 	}
 
 	private bindMouseWheelEvent(): void {
-		this.canvasElement.addEventListener('mousewheel', this.mouseWheelEventHandler)
-		this.canvasElement.addEventListener('DOMMouseScroll', this.mouseWheelEventHandler)
+		this.canvasElement.addEventListener('mousewheel', this.variablesPool.mouseWheelEventHandler)
+		this.canvasElement.addEventListener('DOMMouseScroll', this.variablesPool.mouseWheelEventHandler)
 	}
 
 	private bindBlurEvent(): void {

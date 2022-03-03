@@ -7,7 +7,7 @@ export enum EEVENT_NAMESPANCE {
 	DELETE_ONE = 'DELETE_ONE',
 }
 
-export default class Events {
+export default class EventsBus {
 	private events: { [key: string]: any }
 	constructor() {
 		this.events = {}

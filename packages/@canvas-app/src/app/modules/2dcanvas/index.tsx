@@ -15,8 +15,10 @@ function Canvas(props: any) {
 			canvasContoller.setGeometryConstructor(d2canvas.Geometry.Line)
 			canvasContoller.toggleStateToSelect()
 			canvasContoller.rerender()
-			console.log(canvasContoller.getPixCanvasData())
 			console.log(canvasContoller)
+			console.log(canvasContoller.getPixCanvasData())
+			//@ts-ignore
+			window.drawCanvas = canvasContoller
 		}
 	}, [])
 	return (
