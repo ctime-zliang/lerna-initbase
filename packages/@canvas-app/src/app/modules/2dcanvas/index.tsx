@@ -1,54 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Radio } from 'antd'
 import styles from './index.module.less'
-import d2canvas from '../../../../build/2dcanvas'
-
-const DRAW_MODE = {
-	SELECT: 'SELECT',
-	DRAW: 'DRAW',
-}
+import { DRAW_GEOMETRY, DRAW_MODE } from './config'
+import { initCanvasControllerCase, setDrawGeometryAction, setDrawModeAction } from './action'
 
 function Canvas(props: any) {
-	const [drawMode, setDrawMode] = useState<string>(DRAW_MODE.DRAW)
 	const canvasRef = useRef<null>(null)
 	const canvasContoller = useRef<any>(null)
+	const [drawMode, setDrawMode] = useState<string>(DRAW_MODE.DRAW)
+	const [drawGeometry, setDrawGeometry] = useState<string>(DRAW_GEOMETRY.RECT)
 
-	const setDrawModeAction = (e: any) => {
-		if (!canvasContoller.current) {
-			return
-		}
-		const value = e.target.value
-		switch (value) {
-			case DRAW_MODE.DRAW: {
-				setDrawMode(value)
-				canvasContoller.current.toggleStateToDrawing()
-				break
-			}
-			case DRAW_MODE.SELECT: {
-				setDrawMode(value)
-				canvasContoller.current.toggleStateToSelect()
-				break
-			}
-		}
+	const _setDrawModeAction = (e: any) => {
+		setDrawModeAction(canvasContoller.current, e.target.value, setDrawMode)
+	}
+	const _setDrawGeometryAction = (e: any) => {
+		setDrawGeometryAction(canvasContoller.current, e.target.value, setDrawGeometry)
 	}
 
 	useEffect(() => {
 		let canvasElement: any = canvasRef.current
-		if (canvasElement) {
-			canvasContoller.current = new d2canvas.CanvasContoller(canvasElement)
-			canvasContoller.current.init()
-			canvasContoller.current.addGeometry(new d2canvas.Geometry.Circle(200, 200, 75))
-			canvasContoller.current.addGeometry(new d2canvas.Geometry.Rect(150, 90, 100, 100))
-			canvasContoller.current.addGeometry(new d2canvas.Geometry.Rect(350, 90, 100, 100))
-			canvasContoller.current.setGeometryConstructor(d2canvas.Geometry.Line)
-			canvasContoller.current.toggleStateToDrawing()
-			canvasContoller.current.rerender()
-			console.log(canvasContoller.current)
-			console.log(canvasContoller.current.getPixCanvasData())
-			//@ts-ignore
-			window.drawCanvas = canvasContoller.current
-		}
+		canvasElement && initCanvasControllerCase(canvasElement, canvasContoller)
 	}, [])
+
 	return (
 		<section>
 			<div className={styles['canvas-container']}>
@@ -59,9 +32,17 @@ function Canvas(props: any) {
 			<section className={styles['control-container']}>
 				<div>
 					<label>Draw Mode: </label>
-					<Radio.Group onChange={setDrawModeAction} value={drawMode}>
+					<Radio.Group onChange={_setDrawModeAction} value={drawMode}>
 						<Radio value={DRAW_MODE.DRAW}>{DRAW_MODE.DRAW}</Radio>
 						<Radio value={DRAW_MODE.SELECT}>{DRAW_MODE.SELECT}</Radio>
+					</Radio.Group>
+				</div>
+				<div>
+					<label>Draw Geometry: </label>
+					<Radio.Group onChange={_setDrawGeometryAction} value={drawGeometry}>
+						<Radio value={DRAW_GEOMETRY.RECT}>{DRAW_GEOMETRY.RECT}</Radio>
+						<Radio value={DRAW_GEOMETRY.LINE}>{DRAW_GEOMETRY.LINE}</Radio>
+						<Radio value={DRAW_GEOMETRY.CIRCLE}>{DRAW_GEOMETRY.CIRCLE}</Radio>
 					</Radio.Group>
 				</div>
 			</section>
