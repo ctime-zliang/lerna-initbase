@@ -1,8 +1,8 @@
-import d2canvas, { CanvasContoller } from '../../../../build/2dcanvas'
+import d2canvas, { GeoCanvas } from '../../../../build/2dcanvas'
 import { DRAW_GEOMETRY, DRAW_MODE } from './config'
 
 export const initCanvasControllerCase = (canvasElement: HTMLCanvasElement, ref: any) => {
-	ref.current = new CanvasContoller(canvasElement)
+	ref.current = new GeoCanvas(canvasElement)
 	ref.current.init()
 	ref.current.rerender()
 	ref.current.setGeometryConstructor(d2canvas.Geometry.Rect)
@@ -12,7 +12,7 @@ export const initCanvasControllerCase = (canvasElement: HTMLCanvasElement, ref: 
 	window.drawCanvas = ref.current
 }
 
-export const setDrawModeAction = (canvasContoller: CanvasContoller, value: string, setState: (v: any) => void) => {
+export const setDrawModeAction = (canvasContoller: GeoCanvas, value: string, setState: (v: any) => void) => {
 	if (!canvasContoller) {
 		return
 	}
@@ -30,7 +30,7 @@ export const setDrawModeAction = (canvasContoller: CanvasContoller, value: strin
 	}
 }
 
-export const setDrawGeometryAction = (canvasContoller: CanvasContoller, value: string, setState: (v: any) => void) => {
+export const setDrawGeometryAction = (canvasContoller: GeoCanvas, value: string, setState: (v: any) => void) => {
 	if (!canvasContoller) {
 		return
 	}

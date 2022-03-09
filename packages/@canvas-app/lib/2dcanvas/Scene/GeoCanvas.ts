@@ -4,22 +4,22 @@ import { ECanvasState, Scene, TSceneClickFoundRes } from './Scene'
 const KEYCODE_DELETE: number = 46
 const KEYCODE_CTRL: number = 17
 
-export class CanvasContoller extends Scene {
-	private variablesPool: { [key: string]: any }
+export class GeoCanvas extends Scene {
+	private variablesPool: Map<string, any>
 	private eventsHandler: EventsBus
 	constructor(canvasElement: HTMLCanvasElement) {
 		super(canvasElement)
-		this.variablesPool = {}
+		this.variablesPool = new Map()
 		this.eventsHandler = new EventsBus()
-		this.variablesPool.mouseWheelEventHandler = this.mouseWheelEventHandler.bind(this)
+		this.variablesPool.set('mouseWheelEventHandler', this.mouseWheelEventHandler.bind(this))
 	}
 
 	public init(): void {
 		this.initScene()
-		this.initCanvasContoller()
+		this.initGeoCanvas()
 	}
 
-	private initCanvasContoller(): void {
+	private initGeoCanvas(): void {
 		this.bindRightClickEvent()
 		this.bindMousedownEvent()
 		this.bindMousemoveEvent()
@@ -52,16 +52,16 @@ export class CanvasContoller extends Scene {
 				}
 				/* 绘制模式 */
 				if (this.config.state === ECanvasState.DRAWING) {
+					let geometryTarget: any = null
 					this.mouseState.selectedIndexs = []
 					/* 创建图形实例 */
 					if (this.geometryConstructor) {
-						this.variablesPool.geometryTarget = new this.geometryConstructor(this.mouseState.x, this.mouseState.y)
-						// this.variablesPool.geometryTarget.setNormalPaintStyle(this.drawSetting.paintBrushState)
-						this.variablesPool.geometryTarget.setAssistSetting({ smooth: this.drawSetting.smooth })
+						geometryTarget = new this.geometryConstructor(this.mouseState.x, this.mouseState.y)
+						// geometryTarget.setNormalPaintStyle(this.drawSetting.paintBrushState)
+						geometryTarget.setAssistSetting({ smooth: this.drawSetting.smooth })
 					}
 					/* 将新创建的实例标注为鼠标动态跟踪对象  */
-					this.mouseState.pointTarget = this.variablesPool.geometryTarget
-					this.variablesPool.geometryTarget = null
+					this.mouseState.pointTarget = geometryTarget
 					/* 重绘离屏画布 */
 					this.clearCanvas(this.offScreen.cacheCanvasCtx)
 					for (let i: number = 0; i < this.geometries.length; i++) {
@@ -76,8 +76,8 @@ export class CanvasContoller extends Scene {
 				/* 选择模式 */
 				if (this.config.state === ECanvasState.SELECT) {
 					/* 查询当前鼠标点击时被选中的几何图元 */
-					this.variablesPool.targetResult = <TSceneClickFoundRes>this.findClickedTarget(this.mouseState.x, this.mouseState.y)
-					if (!this.variablesPool.targetResult.geometryTarget) {
+					let targetResult = <TSceneClickFoundRes>this.findClickedTarget(this.mouseState.x, this.mouseState.y)
+					if (!targetResult.geometryTarget) {
 						/*
 							未选中任何几何图元
 								将所有几何图元取消高亮
@@ -91,29 +91,29 @@ export class CanvasContoller extends Scene {
 						this.mouseState.toolTarget = this.tools.boxSelector
 						this.mouseState.toolTarget.setStartCoordinate(this.mouseState.x, this.mouseState.y)
 					} else {
-						const inIndex: number = this.mouseState.selectedIndexs.indexOf(this.variablesPool.targetResult.geometryTargetIndex)
+						const inIndex: number = this.mouseState.selectedIndexs.indexOf(targetResult.geometryTargetIndex)
 						if (this.mouseState.selectedIndexs.length >= 2 && inIndex >= 0) {
 							/* 选中了处于被选中状态的几何图元 */
 							if (this.isOnlyCtrlKeydown()) {
 								this.mouseState.selectedIndexs.splice(inIndex, 1)
-								this.variablesPool.targetResult.geometryTarget.setUnChecked()
-								this.variablesPool.targetResult.geometryTarget.setUnHighlight()
+								targetResult.geometryTarget.setUnChecked()
+								targetResult.geometryTarget.setUnHighlight()
 							}
 						} else {
 							if (this.isOnlyCtrlKeydown()) {
 								/* (仅)按住 Ctrl 键时交替删除/增加该选中的几何图元 */
 								if (inIndex >= 0) {
 									this.mouseState.selectedIndexs.splice(inIndex, 1)
-									this.variablesPool.targetResult.geometryTarget.setUnChecked()
-									this.variablesPool.targetResult.geometryTarget.setUnHighlight()
+									targetResult.geometryTarget.setUnChecked()
+									targetResult.geometryTarget.setUnHighlight()
 								} else {
-									this.mouseState.selectedIndexs.push(this.variablesPool.targetResult.geometryTargetIndex)
-									this.variablesPool.targetResult.geometryTarget.setChecked()
-									this.variablesPool.targetResult.geometryTarget.setHighlight()
+									this.mouseState.selectedIndexs.push(targetResult.geometryTargetIndex)
+									targetResult.geometryTarget.setChecked()
+									targetResult.geometryTarget.setHighlight()
 								}
 							} else {
 								/* 设置仅选中当前被选中的几何图元 */
-								this.mouseState.selectedIndexs = [this.variablesPool.targetResult.geometryTargetIndex]
+								this.mouseState.selectedIndexs = [targetResult.geometryTargetIndex]
 								for (let i: number = 0; i < this.geometries.length; i++) {
 									if (this.mouseState.selectedIndexs[0] === i) {
 										continue
@@ -121,8 +121,8 @@ export class CanvasContoller extends Scene {
 									this.geometries[i].setUnChecked()
 									this.geometries[i].setUnHighlight()
 								}
-								this.variablesPool.targetResult.geometryTarget.setChecked()
-								this.variablesPool.targetResult.geometryTarget.setHighlight()
+								targetResult.geometryTarget.setChecked()
+								targetResult.geometryTarget.setHighlight()
 							}
 						}
 					}
@@ -155,8 +155,8 @@ export class CanvasContoller extends Scene {
 			) {
 				return
 			}
-			this.variablesPool.moveDistX = evte.offsetX - this.mouseState.x
-			this.variablesPool.moveDistY = evte.offsetY - this.mouseState.y
+			this.variablesPool.set('moveDistX', evte.offsetX - this.mouseState.x)
+			this.variablesPool.set('moveDistY', evte.offsetY - this.mouseState.y)
 			this.mouseState.x = evte.offsetX
 			this.mouseState.y = evte.offsetY
 			this.mouseState.isMove = true
@@ -171,7 +171,7 @@ export class CanvasContoller extends Scene {
 				}
 				for (let i: number = this.mouseState.selectedIndexs.length - 1; i >= 0; i--) {
 					const geometry = this.geometries[this.mouseState.selectedIndexs[i]]
-					geometry.moveDist(this.variablesPool.moveDistX, this.variablesPool.moveDistY)
+					geometry.moveDist(this.variablesPool.get('moveDistX'), this.variablesPool.get('moveDistY'))
 				}
 			}
 		})
@@ -218,8 +218,8 @@ export class CanvasContoller extends Scene {
 	}
 
 	private bindMouseWheelEvent(): void {
-		this.canvasElement.addEventListener('mousewheel', this.variablesPool.mouseWheelEventHandler)
-		this.canvasElement.addEventListener('DOMMouseScroll', this.variablesPool.mouseWheelEventHandler)
+		this.canvasElement.addEventListener('mousewheel', this.variablesPool.get('mouseWheelEventHandler'))
+		this.canvasElement.addEventListener('DOMMouseScroll', this.variablesPool.get('mouseWheelEventHandler'))
 	}
 
 	private bindBlurEvent(): void {
@@ -267,6 +267,5 @@ export class CanvasContoller extends Scene {
 
 	private mouseWheelEventHandler(evte: Event): void {
 		evte.preventDefault()
-		console.log(evte)
 	}
 }

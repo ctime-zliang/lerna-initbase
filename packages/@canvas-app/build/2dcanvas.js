@@ -423,10 +423,10 @@
 					/***/
 				},
 
-			/***/ './lib/2dcanvas/Scene/CanvasController.ts':
-				/*!************************************************!*\
-  !*** ./lib/2dcanvas/Scene/CanvasController.ts ***!
-  \************************************************/
+			/***/ './lib/2dcanvas/Scene/GeoCanvas.ts':
+				/*!*****************************************!*\
+  !*** ./lib/2dcanvas/Scene/GeoCanvas.ts ***!
+  \*****************************************/
 				/***/ function (__unused_webpack_module, exports, __webpack_require__) {
 					var __extends =
 						(this && this.__extends) ||
@@ -459,25 +459,25 @@
 							return mod && mod.__esModule ? mod : { default: mod }
 						}
 					Object.defineProperty(exports, '__esModule', { value: true })
-					exports.CanvasContoller = void 0
+					exports.GeoCanvas = void 0
 					var EventsBus_class_1 = __importDefault(__webpack_require__(/*! ../../utils/EventsBus.class */ './lib/utils/EventsBus.class.ts'))
 					var Scene_1 = __webpack_require__(/*! ./Scene */ './lib/2dcanvas/Scene/Scene.ts')
 					var KEYCODE_DELETE = 46
 					var KEYCODE_CTRL = 17
-					var CanvasContoller = /** @class */ (function (_super) {
-						__extends(CanvasContoller, _super)
-						function CanvasContoller(canvasElement) {
+					var GeoCanvas = /** @class */ (function (_super) {
+						__extends(GeoCanvas, _super)
+						function GeoCanvas(canvasElement) {
 							var _this = _super.call(this, canvasElement) || this
-							_this.variablesPool = {}
+							_this.variablesPool = new Map()
 							_this.eventsHandler = new EventsBus_class_1.default()
-							_this.variablesPool.mouseWheelEventHandler = _this.mouseWheelEventHandler.bind(_this)
+							_this.variablesPool.set('mouseWheelEventHandler', _this.mouseWheelEventHandler.bind(_this))
 							return _this
 						}
-						CanvasContoller.prototype.init = function () {
+						GeoCanvas.prototype.init = function () {
 							this.initScene()
-							this.initCanvasContoller()
+							this.initGeoCanvas()
 						}
-						CanvasContoller.prototype.initCanvasContoller = function () {
+						GeoCanvas.prototype.initGeoCanvas = function () {
 							this.bindRightClickEvent()
 							this.bindMousedownEvent()
 							this.bindMousemoveEvent()
@@ -487,15 +487,15 @@
 							this.bindKeyupEvent()
 							this.bindBlurEvent()
 						}
-						CanvasContoller.prototype.isOnlyCtrlKeydown = function () {
+						GeoCanvas.prototype.isOnlyCtrlKeydown = function () {
 							return this.keyboardState.keys.length === 1 && this.keyboardState.keys[0] === KEYCODE_CTRL
 						}
-						CanvasContoller.prototype.bindRightClickEvent = function () {
+						GeoCanvas.prototype.bindRightClickEvent = function () {
 							this.canvasElement.addEventListener('contextmenu', function (evte) {
 								// evte.preventDefault()
 							})
 						}
-						CanvasContoller.prototype.bindMousedownEvent = function () {
+						GeoCanvas.prototype.bindMousedownEvent = function () {
 							var _this = this
 							this.canvasElement.addEventListener('mousedown', function (evte) {
 								evte.stopPropagation()
@@ -508,16 +508,16 @@
 									}
 									/* 绘制模式 */
 									if (_this.config.state === Scene_1.ECanvasState.DRAWING) {
+										var geometryTarget = null
 										_this.mouseState.selectedIndexs = []
 										/* 创建图形实例 */
 										if (_this.geometryConstructor) {
-											_this.variablesPool.geometryTarget = new _this.geometryConstructor(_this.mouseState.x, _this.mouseState.y)
-											// this.variablesPool.geometryTarget.setNormalPaintStyle(this.drawSetting.paintBrushState)
-											_this.variablesPool.geometryTarget.setAssistSetting({ smooth: _this.drawSetting.smooth })
+											geometryTarget = new _this.geometryConstructor(_this.mouseState.x, _this.mouseState.y)
+											// geometryTarget.setNormalPaintStyle(this.drawSetting.paintBrushState)
+											geometryTarget.setAssistSetting({ smooth: _this.drawSetting.smooth })
 										}
 										/* 将新创建的实例标注为鼠标动态跟踪对象  */
-										_this.mouseState.pointTarget = _this.variablesPool.geometryTarget
-										_this.variablesPool.geometryTarget = null
+										_this.mouseState.pointTarget = geometryTarget
 										/* 重绘离屏画布 */
 										_this.clearCanvas(_this.offScreen.cacheCanvasCtx)
 										for (var i = 0; i < _this.geometries.length; i++) {
@@ -532,8 +532,8 @@
 									/* 选择模式 */
 									if (_this.config.state === Scene_1.ECanvasState.SELECT) {
 										/* 查询当前鼠标点击时被选中的几何图元 */
-										_this.variablesPool.targetResult = _this.findClickedTarget(_this.mouseState.x, _this.mouseState.y)
-										if (!_this.variablesPool.targetResult.geometryTarget) {
+										var targetResult = _this.findClickedTarget(_this.mouseState.x, _this.mouseState.y)
+										if (!targetResult.geometryTarget) {
 											/*
                             未选中任何几何图元
                                 将所有几何图元取消高亮
@@ -547,31 +547,29 @@
 											_this.mouseState.toolTarget = _this.tools.boxSelector
 											_this.mouseState.toolTarget.setStartCoordinate(_this.mouseState.x, _this.mouseState.y)
 										} else {
-											var inIndex = _this.mouseState.selectedIndexs.indexOf(
-												_this.variablesPool.targetResult.geometryTargetIndex
-											)
+											var inIndex = _this.mouseState.selectedIndexs.indexOf(targetResult.geometryTargetIndex)
 											if (_this.mouseState.selectedIndexs.length >= 2 && inIndex >= 0) {
 												/* 选中了处于被选中状态的几何图元 */
 												if (_this.isOnlyCtrlKeydown()) {
 													_this.mouseState.selectedIndexs.splice(inIndex, 1)
-													_this.variablesPool.targetResult.geometryTarget.setUnChecked()
-													_this.variablesPool.targetResult.geometryTarget.setUnHighlight()
+													targetResult.geometryTarget.setUnChecked()
+													targetResult.geometryTarget.setUnHighlight()
 												}
 											} else {
 												if (_this.isOnlyCtrlKeydown()) {
 													/* (仅)按住 Ctrl 键时交替删除/增加该选中的几何图元 */
 													if (inIndex >= 0) {
 														_this.mouseState.selectedIndexs.splice(inIndex, 1)
-														_this.variablesPool.targetResult.geometryTarget.setUnChecked()
-														_this.variablesPool.targetResult.geometryTarget.setUnHighlight()
+														targetResult.geometryTarget.setUnChecked()
+														targetResult.geometryTarget.setUnHighlight()
 													} else {
-														_this.mouseState.selectedIndexs.push(_this.variablesPool.targetResult.geometryTargetIndex)
-														_this.variablesPool.targetResult.geometryTarget.setChecked()
-														_this.variablesPool.targetResult.geometryTarget.setHighlight()
+														_this.mouseState.selectedIndexs.push(targetResult.geometryTargetIndex)
+														targetResult.geometryTarget.setChecked()
+														targetResult.geometryTarget.setHighlight()
 													}
 												} else {
 													/* 设置仅选中当前被选中的几何图元 */
-													_this.mouseState.selectedIndexs = [_this.variablesPool.targetResult.geometryTargetIndex]
+													_this.mouseState.selectedIndexs = [targetResult.geometryTargetIndex]
 													for (var i = 0; i < _this.geometries.length; i++) {
 														if (_this.mouseState.selectedIndexs[0] === i) {
 															continue
@@ -579,8 +577,8 @@
 														_this.geometries[i].setUnChecked()
 														_this.geometries[i].setUnHighlight()
 													}
-													_this.variablesPool.targetResult.geometryTarget.setChecked()
-													_this.variablesPool.targetResult.geometryTarget.setHighlight()
+													targetResult.geometryTarget.setChecked()
+													targetResult.geometryTarget.setHighlight()
 												}
 											}
 										}
@@ -598,7 +596,7 @@
 								})
 							})
 						}
-						CanvasContoller.prototype.bindMousemoveEvent = function () {
+						GeoCanvas.prototype.bindMousemoveEvent = function () {
 							var _this = this
 							document.addEventListener('mousemove', function (evte) {
 								evte.stopPropagation()
@@ -613,8 +611,8 @@
 								) {
 									return
 								}
-								_this.variablesPool.moveDistX = evte.offsetX - _this.mouseState.x
-								_this.variablesPool.moveDistY = evte.offsetY - _this.mouseState.y
+								_this.variablesPool.set('moveDistX', evte.offsetX - _this.mouseState.x)
+								_this.variablesPool.set('moveDistY', evte.offsetY - _this.mouseState.y)
 								_this.mouseState.x = evte.offsetX
 								_this.mouseState.y = evte.offsetY
 								_this.mouseState.isMove = true
@@ -629,12 +627,12 @@
 									}
 									for (var i = _this.mouseState.selectedIndexs.length - 1; i >= 0; i--) {
 										var geometry = _this.geometries[_this.mouseState.selectedIndexs[i]]
-										geometry.moveDist(_this.variablesPool.moveDistX, _this.variablesPool.moveDistY)
+										geometry.moveDist(_this.variablesPool.get('moveDistX'), _this.variablesPool.get('moveDistY'))
 									}
 								}
 							})
 						}
-						CanvasContoller.prototype.bindMouseupEvent = function () {
+						GeoCanvas.prototype.bindMouseupEvent = function () {
 							var _this = this
 							document.addEventListener('mouseup', function (evte) {
 								evte.stopPropagation()
@@ -674,18 +672,18 @@
 								}
 							})
 						}
-						CanvasContoller.prototype.bindMouseWheelEvent = function () {
-							this.canvasElement.addEventListener('mousewheel', this.variablesPool.mouseWheelEventHandler)
-							this.canvasElement.addEventListener('DOMMouseScroll', this.variablesPool.mouseWheelEventHandler)
+						GeoCanvas.prototype.bindMouseWheelEvent = function () {
+							this.canvasElement.addEventListener('mousewheel', this.variablesPool.get('mouseWheelEventHandler'))
+							this.canvasElement.addEventListener('DOMMouseScroll', this.variablesPool.get('mouseWheelEventHandler'))
 						}
-						CanvasContoller.prototype.bindBlurEvent = function () {
+						GeoCanvas.prototype.bindBlurEvent = function () {
 							var _this = this
 							window.addEventListener('blur', function (evte) {
 								_this.keyboardState.keys = []
 								_this.config.dirty = false
 							})
 						}
-						CanvasContoller.prototype.bindKeydownEvent = function () {
+						GeoCanvas.prototype.bindKeydownEvent = function () {
 							var _this = this
 							document.addEventListener('keydown', function (evte) {
 								if (!_this.keyboardState.keys.includes(evte.keyCode)) {
@@ -709,7 +707,7 @@
 								}
 							})
 						}
-						CanvasContoller.prototype.bindKeyupEvent = function () {
+						GeoCanvas.prototype.bindKeyupEvent = function () {
 							var _this = this
 							document.addEventListener('keyup', function (evte) {
 								var opKeyIndex = _this.keyboardState.keys.indexOf(evte.keyCode)
@@ -721,13 +719,12 @@
 								}
 							})
 						}
-						CanvasContoller.prototype.mouseWheelEventHandler = function (evte) {
+						GeoCanvas.prototype.mouseWheelEventHandler = function (evte) {
 							evte.preventDefault()
-							console.log(evte)
 						}
-						return CanvasContoller
+						return GeoCanvas
 					})(Scene_1.Scene)
-					exports.CanvasContoller = CanvasContoller
+					exports.GeoCanvas = GeoCanvas
 
 					/***/
 				},
@@ -1160,12 +1157,12 @@
   \******************************/
 
 			Object.defineProperty(exports, '__esModule', { value: true })
-			var CanvasController_1 = __webpack_require__(/*! ./Scene/CanvasController */ './lib/2dcanvas/Scene/CanvasController.ts')
+			var GeoCanvas_1 = __webpack_require__(/*! ./Scene/GeoCanvas */ './lib/2dcanvas/Scene/GeoCanvas.ts')
 			var Circle_1 = __webpack_require__(/*! ./Geometies/Circle */ './lib/2dcanvas/Geometies/Circle.ts')
 			var Line_1 = __webpack_require__(/*! ./Geometies/Line */ './lib/2dcanvas/Geometies/Line.ts')
 			var Rect_1 = __webpack_require__(/*! ./Geometies/Rect */ './lib/2dcanvas/Geometies/Rect.ts')
 			exports['default'] = {
-				CanvasContoller: CanvasController_1.CanvasContoller,
+				GeoCanvas: GeoCanvas_1.GeoCanvas,
 				Geometry: {
 					Circle: Circle_1.Circle,
 					Line: Line_1.Line,
