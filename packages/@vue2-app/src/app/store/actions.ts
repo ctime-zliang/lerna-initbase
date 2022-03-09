@@ -1,6 +1,6 @@
 import { MutationNamesEnum } from './mutations'
 
-export interface IActionCommit {
+export type TActionCommit = {
 	commit: Function
 }
 
@@ -9,7 +9,7 @@ export enum ActionNamesEnum {
 }
 
 export const actions = {
-	async [ActionNamesEnum.UPDATE_GLOBAL_UUID_ACTION]({ commit }: IActionCommit, data: any): Promise<any> {
+	async [ActionNamesEnum.UPDATE_GLOBAL_UUID_ACTION]({ commit }: TActionCommit, data: any): Promise<any> {
 		return commit(MutationNamesEnum.UPDAT_GLOBAL_UUID, data)
 	},
 }

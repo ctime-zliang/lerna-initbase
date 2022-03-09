@@ -1,12 +1,12 @@
-import { IState } from './state'
+import { TState } from './state'
 
 export const mapGetterNames: string[] = ['timeStateGetter', 'globalUuidGetter']
 
 export const getters = {
-	timeStateGetter(state: IState): number {
+	timeStateGetter(state: TState): number {
 		return state.timeStamp
 	},
-	globalUuidGetter(state: IState): string {
+	globalUuidGetter(state: TState): string {
 		return state.globalUuid
 	},
 }
