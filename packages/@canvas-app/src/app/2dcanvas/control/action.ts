@@ -9,7 +9,8 @@ export const initCanvasControllerCase = (canvasElement: HTMLCanvasElement) => {
 	console.log(geoCanvas)
 	console.log(geoCanvas.getPixCanvasData())
 	//@ts-ignore
-	window.drawCanvas = ref.current
+	window.drawCanvas = geoCanvas
+	return geoCanvas
 }
 
 export const setDrawModeAction = (canvasContoller: GeoCanvas, value: string) => {

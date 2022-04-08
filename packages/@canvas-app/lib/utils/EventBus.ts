@@ -18,8 +18,11 @@ class EventBus {
 		if (!eventName || typeof eventName !== 'string' || typeof callback !== 'function') {
 			return
 		}
-		if (!handlers[sn] || !handlers[sn][eventName]) {
-			handlers[sn] = { [eventName]: [] }
+		if (!handlers[sn]) {
+			handlers[sn] = {}
+		}
+		if (!handlers[sn][eventName]) {
+			handlers[sn][eventName] = []
 		}
 		handlers[sn][eventName].push(callback)
 	}
