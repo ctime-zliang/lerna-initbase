@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Radio } from 'antd'
 import styles from './index.module.less'
 import { DRAW_GEOMETRY, DRAW_MODE } from './config'
-import { initCanvasControllerCase, setDrawGeometryAction, setDrawModeAction } from './action'
+import EventBus from '../../../utils/EventBus'
+import { EUserActionEventName } from '../../config/eventname.enum'
 
 function Canvas(props: any) {
 	const canvasRef = useRef<null>(null)
@@ -11,15 +12,16 @@ function Canvas(props: any) {
 	const [drawGeometry, setDrawGeometry] = useState<string>(DRAW_GEOMETRY.RECT)
 
 	const _setDrawModeAction = (e: any) => {
-		setDrawModeAction(canvasContoller.current, e.target.value, setDrawMode)
+		setDrawMode(e.target.value)
+		EventBus.emit(EUserActionEventName.UpdateDrawMode, { value: e.target.value })
 	}
 	const _setDrawGeometryAction = (e: any) => {
-		setDrawGeometryAction(canvasContoller.current, e.target.value, setDrawGeometry)
+		setDrawGeometry(e.target.value)
+		EventBus.emit(EUserActionEventName.UpdateDrawGeometryType, { value: e.target.value })
 	}
 
 	useEffect(() => {
-		let canvasElement: any = canvasRef.current
-		canvasElement && initCanvasControllerCase(canvasElement, canvasContoller)
+		EventBus.emit(EUserActionEventName.InitCanvas, { canvasElement: canvasContoller.current })
 	}, [])
 
 	return (
