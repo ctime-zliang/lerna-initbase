@@ -1,4 +1,4 @@
-import EventsBus from '../../utils/EventsBus.class'
+import EventsBus, { TEventBus } from '../../utils/EventBus'
 import { ECanvasState, Scene, TSceneClickFoundRes } from './Scene'
 
 const KEYCODE_DELETE: number = 46
@@ -6,11 +6,11 @@ const KEYCODE_CTRL: number = 17
 
 export class GeoCanvas extends Scene {
 	private variablesPool: Map<string, any>
-	private eventsHandler: EventsBus
+	private eventsHandler: TEventBus
 	constructor(canvasElement: HTMLCanvasElement) {
 		super(canvasElement)
 		this.variablesPool = new Map()
-		this.eventsHandler = new EventsBus()
+		this.eventsHandler = EventsBus
 		this.variablesPool.set('mouseWheelEventHandler', this.mouseWheelEventHandler.bind(this))
 	}
 

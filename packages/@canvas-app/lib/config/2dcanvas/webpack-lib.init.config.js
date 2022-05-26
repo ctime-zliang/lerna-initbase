@@ -1,7 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const { ESBuildPlugin } = require('esbuild-loader')
-const { DtsBundlePlugin } = require('./webpack-lib.plugins.utils')
+const { DtsBundlePlugin } = require('../webpack-lib.plugins.utils')
 
 const webpackLibInitConfig = {
 	target: 'web',
@@ -14,7 +14,8 @@ const webpackLibInitConfig = {
 		new webpack.ProgressPlugin(),
 		new DtsBundlePlugin({
 			name: `2dcanvas`,
-			rootPath: path.join(process.cwd(), './build/@types'),
+			/* ... */
+			rootPath: path.join(process.cwd(), './lib/build/@types'),
 			entry: './2dcanvas/main.d.ts',
 			output: '../2dcanvas.d.ts',
 		}),

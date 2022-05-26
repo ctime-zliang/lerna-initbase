@@ -9,7 +9,7 @@ const jsEsbuildLoader = {
 		target: 'es2015',
 		jsxFactory: 'React.createElement',
 		jsxFragment: 'React.Fragment',
-		tsconfigRaw: require('../../tsconfig.lib-build.json'),
+		tsconfigRaw: require('../../../tsconfig.lib-build.json'),
 	},
 }
 
@@ -22,7 +22,7 @@ const jsEsbuildLoader = {
 // 		target: 'es2015',
 // 		jsxFactory: 'React.createElement',
 // 		jsxFragment: 'React.Fragment',
-// 		tsconfigRaw: require('../../tsconfig.json'),
+// 		tsconfigRaw: require('../../../tsconfig.lib-build.json'),
 // 		minify: false,
 // 		minifyWhitespace: false,
 // 		sourcemap: true,

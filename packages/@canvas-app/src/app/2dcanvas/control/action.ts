@@ -1,4 +1,4 @@
-import d2canvas, { GeoCanvas } from '../../../../build/2dcanvas'
+import d2canvas, { GeoCanvas } from '../../../../lib/build/2dcanvas'
 import { DRAW_GEOMETRY, DRAW_MODE } from '../modules/main/config'
 
 export const initCanvasControllerCase = (canvasElement: HTMLCanvasElement) => {

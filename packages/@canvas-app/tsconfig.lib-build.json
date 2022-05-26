@@ -17,7 +17,7 @@
 		"isolatedModules": true,
 		"resolveJsonModule": true,
 		"declaration": true,
-		"declarationDir": "build/@types",
+		"declarationDir": "lib/build/@types",
 		"noEmit": false,
 		"baseUrl": "./packages/@canvas-app"
 	},

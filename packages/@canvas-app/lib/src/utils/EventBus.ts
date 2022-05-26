@@ -98,4 +98,5 @@ class EventBus {
 	}
 }
 
+export type TEventBus = EventBus
 export default new EventBus()
